@@ -1,0 +1,18 @@
+%\documentclass[twoside,11pt]{article}
+\documentclass[preprint,12pt,authoryear]{elsarticle}
+%Combining all sub documents into this
+\input{Preamble} 
+\usepackage{subfiles}
+
+\begin{document}
+
+\subfile{Introduction}
+\subfile{TCPBackground}
+\subfile{grandTCP}
+%\subfile{Appendix}
+
+\newpage
+%\section*{References}
+\bibliographystyle{elsarticle-harv} 
+\bibliography{grandTCP}
+\end{document}

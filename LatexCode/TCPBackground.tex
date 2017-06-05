@@ -1,0 +1,49 @@
+\documentclass[main]{subfiles}
+\begin{document}
+\section{Notations and Background}
+\subsection{Set Partition}
+A partion of a set $S = \{ 1,...,n\}$ is a family of subsets $S_1, ..., S_k \subset S$, satisfying the following.
+\begin{enumerate}
+\item $S_i \cap S_j = \emptyset$, if $i \neq j$
+\item $S = \bigcup_{i=1}^k S_i$
+\item $ S_i \neq \emptyset$, for $i={1,..,k}$
+\end{enumerate}
+\subsection{Transductive Conformity Prediction (TCP)}
+The object space $\mathcal{X} \in \mathbb{R}^p$, where $p$ is the number of features, and  label space $\mathcal{Y} \in (0,1)$, and example space $\mathcal{Z} := \mathcal{X} \times \mathcal{Y}$ are fixed throughout the article.
+
+The typical classification problem is, given a training dataset $Z = \{ z_1 , ..., z_n \} $ -- where n is the number of observations in the training set, and each observation $z_i = (x_i, y_i)$ are labeled observations-- we want to predict the label of a new observation $x$ whose label is unknown. 
+
+First, we define a transductive non-conformity measure and transductive conformity score in the following.
+
+\begin{definition} [Transductive nonconformity measure]
+A transductive nonconformity measure is a measurable function $\mathcal{A} : \mathcal{Z} \times \mathcal{Z}  \rightarrow \mathbb{R}$ such that $\mathcal{A}(Z_1 , Z_2 )$ does not depend on the ordering of observations in the set $Z_1$.
+\end{definition}
+
+\begin{definition}[Transductive nonconformity score]
+The transductive nonconformity score measures the lack of conformity of the ``test observation" $Z_2$ to the ``training set" $Z_1$.
+\end{definition}
+
+\begin{definition}[Transductive Conformity Prediction (TCP)]
+Given a training dataset $Z$ and a new observation $x$, the transductive conformal predictor (TCP ), corresponding to a nonconformity measure $\mathcal{A}$, checks each of a set of hypothesis (for all possible labels) for the new observation $x$, and assigns it a p-value at a significance level $\epsilon \in (0, 1)$.  %finds the prediction region for the test set $x$ at a significance level $\epsilon \in (0, 1)$.
+\end{definition}
+
+
+\begin{algorithm}[H]
+ \textbf{Input:}{ (training dataset:Z, test data:x, label set:Y, a nonconformity measure:$\mathcal{A})$}\\
+ \textbf{Output:}{\textbf{ p-values} }\\
+ %\textbf{Initialization\;}
+ \For{each $y \in \mathcal{Y}$ }{
+ 	$z_{n+1} = (x,y) $;\\
+ 	$Z^* = (Z,z_{n+1})$ ;\\
+ 	Compute the transductive nonconformity scores:\\
+ 	 $\alpha_i = \mathcal{A}(Z^*, z_i)$ for each $z_i \in Z^*$;\\
+ 	 \textbf{\\}
+	Compute p-value: $ p(y) = \frac{| i=\{1,..,n+1\} \mid \alpha_i \geq \alpha_{n+1} |}{n}$;\\
+  }
+ \caption{\textbf{TCP}}
+ $\textbf{p-values} = \{ p(y)| y \in \mathcal{Y}\}$;\\
+ \textbf{return \textbf{p-values}};\\
+ \end{algorithm}
+ 
+
+\end{document}
