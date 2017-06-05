@@ -1,0 +1,41 @@
+\documentclass[main]{subfiles}
+%\input{Preamble} 
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{Aggregating predictions on multiple non-disclosed datasets using conformal prediction}
+
+\author[label1]{Ola Spjuth}
+\author[label2]{Lars Carlsson}
+\author[label1]{Niharika Gauraha}
+
+
+\address[label1]{Uppsala University}
+\address[label2]{AstraZeneca}
+
+\begin{abstract}
+The flexible framework for machine learning algorithms called conformal prediction, provides region predictions with guaranteed confidence under mild conditions. %error rate.
+Transductive version of conformal predictors have been proven to be valid and more information efficient. In this paper, we propose to aggregate conformal predictions from multiple sources, where transductive conformal predictors are applied on the multiple data sources and their individual predictions are aggregated to form a single prediction on a new example. We illustrate the method using simulated and real data sets, and we show that the proposed method produces much more efficient predictions than individual analsys.
+\end{abstract}
+\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword
+
+%% PACS codes here, in the form: \PACS code \sep code
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+Conformal Predition \sep TCP   \sep ACP
+\end{keyword}
+
+\end{frontmatter}
+
+\section{Introduction}
+%it is not uncommon to have multiple sources of data .
+In the biopharmaceutical sciences, it is not unusual for an experiment to be replicated by different manufacturing groups. However, the pooling (or sharing) of experimental data across various manufacturing groups are not encouraged. Also data security is  one of the main concerns that has given rise to DataSHIELD aproaches (secure analyses that do not require sharing of data). 
+In this article we propose to combine results across experiments without sharing the data, by aggregating conformal preditions computed at individual source level.  In particular, we propose to combine conformal p-values from multiple data sources using weighted aggregation or fishers method. %We illustrate the method using simulated and real data sets, and we show that the proposed method produces much more efficient predictions than individual analsys.
+
+The organization of the paper is as follows. In section 2, we introduce the background concepts and notation, used throughout the paper. In Section 3, we will introduce the concept of aggregating conformal predictions from multiple sources. In Section 4, we discuss the statstical properties of agregated conformal predictions from multiple sources. In Section 5, we perform some numerical analsys on simulated and real datasets. Finally, in Section 6, the summary of the papery is provided.
+We have also included an appendix that reviews the most relevant aspects about TCP, ICP, CCP and ACP.
+\end{document}

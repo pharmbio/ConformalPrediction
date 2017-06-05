@@ -1,0 +1,117 @@
+\documentclass[main]{subfiles}
+
+\begin{document}
+
+\section{Multi source aggregated TCP Algorithm}
+Let us consider a binary classification problem, and suppose we have a training dataset $Z$ and  external test data set $X$, or we randomly partition the given dataset into training ($80\%$) and external test set ($20\%$). The algorithm for aggregated TCP from multiple sources is as follows (see Figure 1).
+\begin{enumerate}
+
+\item The training data set is randomly split into K parts (disjointly) with varying sizes. For example, Let $Z = \{ z_1 , ..., z_n \} $ be the data set, then we divide the dataset into $S_1, ..., S_K$ such that $Z = \bigcup_{i=1}^K S_i$, $k_i = |S_i|$ and $n = k_1+ ...+k_K$.
+
+\item We compute p-values using  $(X,S_i)$ for each $S_i$, say $p_i$ for each class, then we finally aggregate the k, p-values (weighted average).  
+
+\item We repeat the step 1 and step 2 with different values of K and $k_i's$ say for $q$ times.
+
+\item  Then we analyze the $q$ results obtained (this part is not clear yet).
+
+\end{enumerate}
+
+
+ \begin{algorithm}[H]
+ \textbf{Input:}{ (training dataset:Z, test dataset:X, label set:Y, a nonconformity measure:$\mathcal{A})$}\\
+ \textbf{Output:}{\textbf{ Aggregated p-values} }\\
+ \textbf{Initialization\;}
+ Unequal size partition: Partition training.data randomly and unequally into K parts, $S_1, ..., S_K$ ;\\ %such that $Z = \bigcup_{i=1}^K S_i$, $k_i = |S_i|$ and $n = k_1+ ...+k_K$, where n is size of the training.data \\
+ \textbf{Steps\;}
+ \For{each $S_i$,  $i \in \{ 1,...,K\} $ }{
+ 	\For{each observation $x_j \in X$}{
+ 		Compute p-values by using \textbf{TCP} algorithm:\\
+ 		 
+  		$ PValues_i =  \textbf{TCP}(S_i, x_i, Y , \mathcal{A})$;\\
+  	
+  }
+ }
+ Aggregate $PValues_i$ from various sources into a set \textbf{p-values}
+ \caption{Multi source aggregated TCP}
+ \textbf{return \textbf{p-values}}
+ \end{algorithm}
+ 
+ \usetikzlibrary{arrows,shapes,positioning,shadows,trees}
+
+\tikzset{
+  basic/.style  = {draw, text width=2cm, drop shadow, font=\sffamily, rectangle},
+  root/.style   = {basic, thin, align=center, 
+                   fill=white!30, text width=5em},
+  level 2/.style = {basic,  thin,align=center, fill=white!60,
+                   text width=5em},
+  level 3/.style = {basic, thin, align=left, fill=white!60, text width=5em}
+}
+
+
+\begin{center}
+\begin{figure}
+
+\begin{tikzpicture}[
+  level 1/.style={sibling distance=40mm},
+  edge from parent/.style={->,draw},
+  >=latex]
+
+% root of the the initial tree, level 1
+\node[root] {Dataset}
+% The first level, as children of the initial tree
+  child {node[level 2,xshift=-100pt] (c1) {Training Data (80\%)}}
+  child {node[level 3, xshift=50pt] (c2) {Test data (20\%)}};
+  
+
+% The second level, relatively positioned nodes
+\begin{scope}[every node/.style={level 2}]
+\node [below of = c1, xshift=-100pt, yshift=-30] (c11) {Training Data1};
+\node [right of = c11, xshift=50pt] (c12) {Training Data2};
+\node [right of = c12, xshift=100pt] (c13) {Training DataK};
+
+%\node [below of = c11, yshift=-100] (m11) {Endpoint prediction probabilities using TCP};
+%\node [below of = c12, yshift=-100] (m12) {Endpoint prediction probabilities using TCP};
+%\node [below of = c13, yshift=-100] (m13) {Endpoint prediction probabilities using TCP};
+
+\node [below of = c11, yshift=-100] (p11) {Estimation of p-values using TCP};
+\node [below of = c12, yshift=-100] (p12) {Estimation of p-values using TCP};
+\node [below of = c13, yshift=-100] (p13) {Estimation of p-values using TCP};
+
+\node [below of = p12, xshift=30, yshift=-100] (a11) {\textbf{Aggregated p-values } };
+
+\end{scope}
+
+% lines from each level 1 node to every one of its "children"
+%\foreach \value in {1,2,3}
+ % \draw[->] (c1.195) |- (c1\value.west);
+
+  \draw[->] (c1)->(c11);
+  \draw[->] (c1)->(c12);
+  \draw[->] (c1)->(c13);
+\path (c12) -- node[auto=false]{\ldots} (c13);
+
+%\draw[->] (c11)->(m11);
+%  \draw[->] (c12)->(m12);
+%  \draw[->] (c13)->(m13);
+ % \path (m12) -- node[auto=false]{\ldots} (m13);
+
+\draw[->] (c11)->(p11);
+  \draw[->] (c12)->(p12);
+  \draw[->] (c13)->(p13);
+  \path (p12) -- node[auto=false]{\ldots} (p13);
+  
+  \draw[->] (p11)->(a11);
+  \draw[->] (p12)->(a11);
+  \draw[->] (p13)->(a11);
+  
+  \draw[->] (c2)->(p11);
+  \draw[->] (c2)->(p12);
+  \draw[->] (c2)->(p13);
+  
+\end{tikzpicture}
+\caption{Multi source aggregated TCP Algorithm}
+\end{figure}
+
+\end{center}
+
+\end{document}
