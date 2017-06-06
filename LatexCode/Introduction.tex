@@ -5,7 +5,8 @@
 
 \begin{frontmatter}
 
-\title{Aggregating predictions on multiple non-disclosed datasets using conformal prediction}
+%\title{A Flexible Framework for Conformal Predictions on Multiple Non-disclosed Datasets}
+\title{Aggregating Predictions on Multiple Non-disclosed Datasets using Conformal Prediction}
 
 \author[label1]{Ola Spjuth}
 \author[label2]{Lars Carlsson}
@@ -16,8 +17,10 @@
 \address[label2]{AstraZeneca}
 
 \begin{abstract}
-The flexible framework for machine learning algorithms called conformal prediction, provides region predictions with guaranteed confidence under mild conditions. %error rate.
-Transductive version of conformal predictors have been proven to be valid and more information efficient. In this paper, we propose to aggregate conformal predictions from multiple sources, where transductive conformal predictors are applied on the multiple data sources and their individual predictions are aggregated to form a single prediction on a new example. We illustrate the method using simulated and real data sets, and we show that the proposed method produces much more efficient predictions than individual analsys.
+The flexible framework for machine learning algorithms called conformal prediction, provides region predictions with guaranteed confidence under mild conditions. %error rate. Transductive version of conformal predictors have been proven to be valid and more information efficient. 
+In this paper, we extend the basic conformal prediction framework to handle %conformal predictions combining results from 
+multiple data sources that do not require sharing of data.
+We propose to aggregate conformal predictions from multiple sources, where transductive conformal predictors are applied on the multiple data sources and their individual predictions are aggregated to form a single prediction on a new example. We illustrate the method using simulated and real data sets, and we show that the proposed method produces much more efficient predictions than individual analsys.
 \end{abstract}
 \begin{keyword}
 %% keywords here, in the form: keyword \sep keyword
@@ -34,7 +37,17 @@ Conformal Predition \sep TCP   \sep ACP
 \section{Introduction}
 %it is not uncommon to have multiple sources of data .
 In the biopharmaceutical sciences, it is not unusual for an experiment to be replicated by different manufacturing groups. However, the pooling (or sharing) of experimental data across various manufacturing groups are not encouraged. Also data security is  one of the main concerns that has given rise to DataSHIELD aproaches (secure analyses that do not require sharing of data). 
-In this article we propose to combine results across experiments without sharing the data, by aggregating conformal preditions computed at individual source level.  In particular, we propose to combine conformal p-values from multiple data sources using weighted aggregation or fishers method. %We illustrate the method using simulated and real data sets, and we show that the proposed method produces much more efficient predictions than individual analsys.
+In this article we propose to combine results across experiments without sharing the data, by aggregating conformal preditions computed at individual source level.  In particular, we propose to combine conformal p-values from multiple data sources using weighted aggregation or fisher's method. 
+
+Basically, conformal predictors are “confidence predictors”, that results prediction sets for all confidence levels. Thus, conformal prediction is a framework that complements the predictions of machine learning algorithms with reliable measures of confidence.
+Transductive version of conformal predictors have been proven to be valid and more information efficient. In this paper, we extend the basic conformal prediction framework to handle multiple data sources and without sharing of data between sources. We propose to aggregate conformal predictions from multiple sources, where transductive conformal predictors are applied on the multiple data sources and their individual predictions are aggregated to form a single prediction on a new example.
+
+The advantages of this approach of combining conformal predictions across multiple sources are two fold. 
+Firstly, it is more a framework than a method, and it extends the existing framework of conformal prediction for multiple data sources, that do not require sharing of data. Secondly, combined analysis produces much more efficient predictions than individual analsys. This innovative framework is flexible in the sense it supports flexible number and sizes of data sources.
+
+At a high level, our algorithm works as follows. Consider a binary classification problem, and suppose we have a training dataset $Z$ and an external test data $x$. The training data set is randomly and unequally split into K parts. For example, Let $Z = \{ z_1 , ..., z_n \} $ be the data set of $n$ observations, then we divide the dataset into $S_1, ..., S_K$ such that $Z = \bigcup_{i=1}^K S_i$, and $n = k_1+ ...+k_K$, where $k_i = |S_i|$. We compute p-values under TCP framework using the combined dataset  $(S_i,x)$ for each $S_i$. We have K p-values (for each class), now we aggregate (weighted) the k, p-values to obtain a final p-value for each class for the new example $x$. We repeat the process say $q$ times by varying number and sizes of the sources. The final analysis consists of analysing $q$ results which accounts for number as well as size of the data sources.
+
+%We illustrate the method using simulated and real data sets, and we show that the proposed method produces much more efficient predictions than individual analsys.
 
 The organization of the paper is as follows. In section 2, we introduce the background concepts and notation, used throughout the paper. In Section 3, we will introduce the concept of aggregating conformal predictions from multiple sources. In Section 4, we discuss the statstical properties of agregated conformal predictions from multiple sources. In Section 5, we perform some numerical analsys on simulated and real datasets. Finally, in Section 6, the summary of the papery is provided.
 We have also included an appendix that reviews the most relevant aspects about TCP, ICP, CCP and ACP.
