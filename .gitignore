@@ -1,0 +1,9 @@
+.DS_Store
+*.pdf
+*.out
+*.log
+*.aux
+*.synctex.gz
+*.blg
+*.bbl
+LatexCode/main.pdf
