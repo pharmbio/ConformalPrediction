@@ -1,26 +1,35 @@
 \documentclass[main]{subfiles}
 \begin{document}
-\section{Notations and Background}
-\subsection{Set Partition}
-A partion of a set $S = \{ 1,...,n\}$ is a family of subsets $S_1, ..., S_k \subset S$, satisfying the following.
+\section{Background and Notations}
+This section gives a brief background about TCP and fixes notations and definitions used throughout the paper.
+
+%\subsection{Transductive Conformity Prediction (TCP)}
+\section*{Notations and Assumptions}
+The object space is denoted by $\mathcal{X} \in \mathbb{R}^p$, where $p$ is the number of features, and  label space is denoted by $\mathcal{Y} \in (0,1)$. We assume that each observation consists of an object and its label, and its space is given as $\mathcal{Z} := \mathcal{X} \times \mathcal{Y}$. %are fixed throughout the article. 
+The typical classification problem is, given a training dataset $Z = \{ z_1 , ..., z_n \} $ -- where n is the number of observations in the training set, and each observation $z_i = (x_i, y_i)$ are labeled observations-- we want to predict the label of a new observation $x$ whose label is unknown. 
+
+%First, we define a transductive non-conformity measure and transductive conformity score in the following.
+
+\begin{definition} [Set Partition]
+A partition of a set $S = \{ 1,...,n\}$ is a set of $k$ subsets $S_1, ..., S_k \subset S$, satisfying the following.
 \begin{enumerate}
 \item $S_i \cap S_j = \emptyset$, if $i \neq j$
 \item $S = \bigcup_{i=1}^k S_i$
 \item $ S_i \neq \emptyset$, for $i={1,..,k}$
 \end{enumerate}
-\subsection{Transductive Conformity Prediction (TCP)}
-The object space $\mathcal{X} \in \mathbb{R}^p$, where $p$ is the number of features, and  label space $\mathcal{Y} \in (0,1)$, and example space $\mathcal{Z} := \mathcal{X} \times \mathcal{Y}$ are fixed throughout the article. We assume that each observation consists of an object
-and its label.
-
-The typical classification problem is, given a training dataset $Z = \{ z_1 , ..., z_n \} $ -- where n is the number of observations in the training set, and each observation $z_i = (x_i, y_i)$ are labeled observations-- we want to predict the label of a new observation $x$ whose label is unknown. 
-
-First, we define a transductive non-conformity measure and transductive conformity score in the following.
-
-\begin{definition} [Transductive nonconformity measure]
-A transductive nonconformity measure is a measurable function $\mathcal{A} : \mathcal{Z} \times \mathcal{Z}  \rightarrow \mathbb{R}$ such that $\mathcal{A}(Z_1 , Z_2 )$ does not depend on the ordering of observations in the set $Z_1$.
 \end{definition}
 
-\begin{definition}[Transductive nonconformity score]
+The exchangeability is assumed throughout the paper, it is defined as follows.
+\begin{definition} [Exchangeability]
+Given a random vector $X= (X_1, ..., X_p)$ consisting of $p$ random vectors. $X$ is called exchangeable if $(X_1,...X_p)$ = $(X_{j1},...,X_{jd})$ for any permutation $j1,...,jp$. Every independent and identically distributed vector X is  also exchangeable. 
+\end{definition}
+
+The nonconformity measure is a function that measures the strangeness of an observations, it is defined as follows. 
+\begin{definition} [Nonconformity Measure]
+A nonconformity measure is a measurable function $\mathcal{A} : \mathcal{Z} \times \mathcal{Z}  \rightarrow \mathbb{R}$ such that $\mathcal{A}(Z_1 , Z_2 )$ does not depend on the ordering of observations in the set $Z_1$. 
+\end{definition}
+
+\begin{definition}[Nonconformity Score]
 The transductive nonconformity score measures the lack of conformity of the ``test observation" $Z_2$ to the ``training set" $Z_1$.
 \end{definition}
 
@@ -46,5 +55,27 @@ Given a training dataset $Z$ and a new observation $x$, the transductive conform
  \textbf{return \textbf{p-values}};\\
  \end{algorithm}
  
+
+The predicted region of a test observation is a subset of $\mathcal{Y}$ , denoted as $\Gamma^{\epsilon}$ at a significance level $\alpha$. The prediction region $\Gamma^{\epsilon}$ can be any one of the following:
+\begin{enumerate}
+\item Empty, when $|\Gamma^{\epsilon}| = 0$.
+\item Singleton, when $|\Gamma^{\epsilon}| = 0$.
+\item Mutiple, Empty, when $|\Gamma^{\epsilon}| >1$.
+\end{enumerate}
+The significance is assumed at $\alpha = 0.05$, so we drop the superscript from the $\Gamma$ from now on wards. The predictor make an error when it predicts an empty prediction region for a test case $|\Gamma| = 0$. Given a training dataset $Z$ and an external test set $T$,  let us assume that the size of the test set is $m$. Suppose that the TCP predicts prediction regions as $\Gamma_1, ...., \Gamma_m$, then the validity and efficiency of a TCP is defined as follows.
+
+\begin{definition}[Error rate]
+	\[ error rate= \frac{\# of errors}{m} \]
+\end{definition}
+
+\begin{definition}[Validity]
+	\[ validity = 1-  \frac{\# of errors}{m} = 1-  error rate \]
+\end{definition}
+
+We note that TCPs are valid in the sense error rate is less than equal to the significance level.
+
+\begin{definition}[Efficiency]
+	\[ efficiency = 1-  \frac{\# of Multiples}{m} \]
+\end{definition}
 
 \end{document}
