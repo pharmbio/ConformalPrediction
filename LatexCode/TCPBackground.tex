@@ -62,20 +62,25 @@ The predicted region of a test observation is a subset of $\mathcal{Y}$ , denote
 \item Singleton, when $|\Gamma^{\epsilon}| = 0$.
 \item Mutiple, Empty, when $|\Gamma^{\epsilon}| >1$.
 \end{enumerate}
-The significance is assumed at $\alpha = 0.05$, so we drop the superscript from the $\Gamma$ from now on wards. The predictor make an error when it predicts an empty prediction region for a test case $|\Gamma| = 0$. Given a training dataset $Z$ and an external test set $T$,  let us assume that the size of the test set is $m$. Suppose that the TCP predicts prediction regions as $\Gamma_1, ...., \Gamma_m$, then the validity and efficiency of a TCP is defined as follows.
+The significance is assumed at $\alpha = 0.05$, so we drop the superscript from $\Gamma$ from now on wards. The predictor make an error when it predicts an empty prediction region for a test case $|\Gamma| = 0$. Given a training dataset $Z$ and an external test set $T$,  let us assume that the size of the test set is $m$. Suppose that the TCP predicts prediction regions as $\Gamma_1, ...., \Gamma_m$, then the validity and efficiency of a TCP is defined as follows.
 
 \begin{definition}[Error rate]
-	\[ error rate= \frac{\# of errors}{m} \]
+\begin{align} \label{eq:errorRate}
+		error rate = \frac{\# of errors}{m}
+\end{align}	 	
 \end{definition}
-
+ 
 \begin{definition}[Validity]
-	\[ validity = 1-  \frac{\# of errors}{m} = 1-  error rate \]
+\begin{align} \label{eq:validity}
+		validity = 1-  \frac{\# of errors}{m} = 1-  error rate 
+\end{align}	 
 \end{definition}
-
 We note that TCPs are valid in the sense error rate is less than equal to the significance level.
 
 \begin{definition}[Efficiency]
-	\[ efficiency = 1-  \frac{\# of Multiples}{m} \]
+\begin{align} \label{eq:efficiency}
+	efficiency = 1-  \frac{\# of Multiples}{m}
+\end{align}
 \end{definition}
 
 \end{document}
