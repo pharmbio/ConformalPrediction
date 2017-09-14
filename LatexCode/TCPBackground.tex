@@ -4,14 +4,14 @@
 This section gives a brief background about TCP and fixes notations and definitions used throughout the paper.
 
 %\subsection{Transductive Conformity Prediction (TCP)}
-\section*{Notations and Assumptions}
+%\section*{Notations and Assumptions}
 The object space is denoted by $\mathcal{X} \in \mathbb{R}^p$, where $p$ is the number of features, and  label space is denoted by $\mathcal{Y} \in (0,1)$. We assume that each observation consists of an object and its label, and its space is given as $\mathcal{Z} := \mathcal{X} \times \mathcal{Y}$. %are fixed throughout the article. 
-The typical classification problem is, given a training dataset $Z = \{ z_1 , ..., z_n \} $ -- where n is the number of observations in the training set, and each observation $z_i = (x_i, y_i)$ are labeled observations-- we want to predict the label of a new observation $x$ whose label is unknown. 
+The typical classification problem is, given a training dataset $Z = \{ z_1 , ..., z_n \} $ -- where $n$ is the number of observations in the training set, and each observation $z_i = (x_i, y_i)$ are labeled observations-- we want to predict the label of a new observation $x_{new}$ whose label is unknown. We use the term partition of observations to mean disjoint partition, which is defined as follows.
 
 %First, we define a transductive non-conformity measure and transductive conformity score in the following.
 
 \begin{definition} [Set Partition]
-A partition of a set $S = \{ 1,...,n\}$ is a set of $k$ subsets $S_1, ..., S_k \subset S$, satisfying the following.
+A partition of a set $S = \{ 1,...,n\}$ into $k$ disjoint subsets $S_1, ..., S_k \subset S$, satisfies the following.
 \begin{enumerate}
 \item $S_i \cap S_j = \emptyset$, if $i \neq j$
 \item $S = \bigcup_{i=1}^k S_i$
@@ -19,31 +19,48 @@ A partition of a set $S = \{ 1,...,n\}$ is a set of $k$ subsets $S_1, ..., S_k \
 \end{enumerate}
 \end{definition}
 
-The exchangeability is assumed throughout the paper, it is defined as follows.
+The exchangeability of observations is assumed throughout the paper, it is defined as follows.
 \begin{definition} [Exchangeability]
-Given a random vector $X= (X_1, ..., X_p)$ consisting of $p$ random vectors. $X$ is called exchangeable if $(X_1,...X_p)$ = $(X_{j1},...,X_{jd})$ for any permutation $j1,...,jp$. Every independent and identically distributed vector X is  also exchangeable. 
+Given a dataset $Z= (z_1, ..., z_n)$ consisting of $n$ observations. $Z$ is called exchangeable if $P(z_1,...z_n)$ = $P(z_{j1},...,z_{jd})$ for any permutation $j1,...,jn$. Every independent and identically distributed dataset $Z$ is  also exchangeable. 
 \end{definition}
 
-The nonconformity measure is a function that measures the strangeness of an observations, it is defined as follows. 
-\begin{definition} [Nonconformity Measure]
-A nonconformity measure is a measurable function $\mathcal{A} : \mathcal{Z} \times \mathcal{Z}  \rightarrow \mathbb{R}$ such that $\mathcal{A}(Z_1 , Z_2 )$ does not depend on the ordering of observations in the set $Z_1$. 
-\end{definition}
+The nonconformity measure is a function that measures the strangeness of an observations,
+this non-conformity measure is used to improve the performance of the prediction algorithms. Consider an example of non-conformity measure for binary classification
+using  random forest method \cite{Breiman}. Voting for each class is computed as a 
+nonconformity scores or probabilities for each data point .  %for example we consider the following non conformity measure for our computations. 
+%\begin{definition} [Nonconformity Measure]
+%A nonconformity measure is a measurable function $\mathcal{A} : \mathcal{Z} \times \mathcal{Z}  \rightarrow \mathbb{R}$ such that $\mathcal{A}(Z_1 , Z_2 )$ does not depend on the ordering of observations in the set $Z_1$. 
+%\end{definition}
 
-\begin{definition}[Nonconformity Score]
-The transductive nonconformity score measures the lack of conformity of the ``test observation" $Z_2$ to the ``training set" $Z_1$.
-\end{definition}
+\begin{align} \label{eq:def_nonconformity}
+\begin{split}
+\alpha_i(z_i, 0) &= \frac{\#\text{trees voting for class 0}}{\#\text{of trees}}\\
+\alpha_i(z_i, 1) &= \frac{\#\text{trees voting for class 1}}{\#\text{of trees}}
+\end{split}
+\end{align}
 
+We denote by $\alpha_i(y)$ nonconformity score for $i^{th}$ observation for class $y$. Each component  $\alpha_i(y)$ that corresponds to the sample $(x_i,y_i)$ is computed by
+euqation (\ref{eq:def_nonconformity}) based on the augmented sample  $\{ z_1 , ..., z_n, z_{n+1}=(x_{new},y) \}$. Then p-value as defined below, \cite{vovk2005algorithmic},  describes the lack of conformity of the  new observation $x_{new}$ to the training set $Z$. 
+ \begin{align*}
+ p_0 &= \frac{| i=\{1,..,n\} \mid \alpha_i(z_i, 0) \geq \alpha(x_{new}, 0) |}{n} \\
+ p_1 &= \frac{| i=\{1,..,n\} \mid \alpha_i(z_i, 1) \geq \alpha(x_{new}, 1) |}{n} 
+ \end{align*}
+The p-value $p(y)=p_y, y \in Y$ lies in $(\frac{1}{n},1)$. The smaller the $p(y)$
+ is, the less likely the true pair is $(x_{new},y)$.
+
+ 
 \begin{definition}[Transductive Conformity Prediction (TCP)]
-Given a training dataset $Z$ and a new observation $x$, the transductive conformal predictor (TCP ), corresponding to a nonconformity measure $\mathcal{A}$, checks each of a set of hypothesis (for all possible labels) for the new observation $x$, and assigns it a p-value at a significance level $\epsilon \in (0, 1)$.  %finds the prediction region for the test set $x$ at a significance level $\epsilon \in (0, 1)$.
+Given a training dataset $Z$ and a new observation $x_{new}$, the transductive conformal predictor (TCP ), corresponding to a nonconformity measure $\mathcal{A}$, checks each of a set of hypothesis (for all possible labels) for the new observation $x_{new}$, and assigns it a p-value at a significance level $\epsilon \in (0, 1)$.  %finds the prediction region for the test set $x$ at a significance level $\epsilon \in (0, 1)$.
 \end{definition}
 
+For further details of TCP, we refer to \cite{vapnik1998statistical}, \cite{shafer2008tutorial}, \cite{vovk2005algorithmic} and \cite{balasubramanian2014conformal}.
 
-\begin{algorithm}[H]
- \textbf{Input:}{ (training dataset:Z, test data:x, label set:Y, a nonconformity measure:$\mathcal{A})$}\\
+\begin{algorithm}[h]
+ \textbf{Input:}{ (training dataset:$Z$, test data:$x_{new}$, label set:$Y$, a nonconformity measure:$\mathcal{A})$}\\
  \textbf{Output:}{\textbf{ p-values} }\\
  %\textbf{Initialization\;}
  \For{each $y \in \mathcal{Y}$ }{
- 	$z_{n+1} = (x,y) $;\\
+ 	$z_{n+1} = (x_{new},y) $;\\
  	$Z^* = (Z,z_{n+1})$ ;\\
  	Compute the transductive nonconformity scores:\\
  	 $\alpha_i = \mathcal{A}(Z^*, z_i)$ for each $z_i \in Z^*$;\\
@@ -56,31 +73,40 @@ Given a training dataset $Z$ and a new observation $x$, the transductive conform
  \end{algorithm}
  
 
-The predicted region of a test observation is a subset of $\mathcal{Y}$ , denoted as $\Gamma^{\epsilon}$ at a significance level $\alpha$. The prediction region $\Gamma^{\epsilon}$ can be any one of the following:
+The predicted region of a test observation is a subset of $\mathcal{Y}$ , denoted as $\Gamma^{\epsilon} = \{ y \mid p_y > \epsilon \}$ at a significance level $\alpha$. The prediction region $\Gamma^{\epsilon}$ can be any one of the following:
 \begin{enumerate}
 \item Empty, when $|\Gamma^{\epsilon}| = 0$.
-\item Singleton, when $|\Gamma^{\epsilon}| = 0$.
-\item Mutiple, Empty, when $|\Gamma^{\epsilon}| >1$.
+\item Singleton, when $|\Gamma^{\epsilon}| = 1$.
+\item Mutiple, when $|\Gamma^{\epsilon}| >1$.
 \end{enumerate}
-The significance is assumed at $\alpha = 0.05$, so we drop the superscript from $\Gamma$ from now on wards. The predictor make an error when it predicts an empty prediction region for a test case $|\Gamma| = 0$. Given a training dataset $Z$ and an external test set $T$,  let us assume that the size of the test set is $m$. Suppose that the TCP predicts prediction regions as $\Gamma_1, ...., \Gamma_m$, then the validity and efficiency of a TCP is defined as follows.
+%The significance is assumed at $\alpha = 0.05$, so we drop the superscript from $\Gamma$ from now on wards. The predictor make an error when it predicts an empty prediction region for a test case $|\Gamma| = 0$.
+ 
+We consider the following three criterion that measures the quality of a TCP: error rate,
+validity and efficiency. A predictor makes an error when the predicted region does not contain the true label $ y \not\in |\Gamma^{\epsilon}|$. Given a training dataset $Z$ and an external test set $T$,  and $|T| = m$. Suppose that the TCP gives prediction regions as $\Gamma_1^{\epsilon}, ...., \Gamma_m^{\epsilon}$, then the error rate, and a way of assessing validity and efficiency of a TCP are defined in the following.
 
 \begin{definition}[Error rate]
 \begin{align} \label{eq:errorRate}
-		error rate = \frac{\# of errors}{m}
-\end{align}	 	
+		ER^{\epsilon} &= \frac{ 1}{m} \sum\limits_{i=1}^{m} \textbf{I}_{ \{y_i \not\in \Gamma_i^{\epsilon} \} },		
+\end{align}	
+where $y_i$ is the true class label of the $i^{th}$ test case and $\textbf{I}$ is an indicator function. 	
 \end{definition}
+%&\frac{\# of errors}{m}
  
+The deviation from exact validity can be computed as (\cite{carlsson2017comparing}) the Euclidean norm of the difference of the observed error and the expected error for a given set of predefined significance levels. Let us assume a set of significance levels $\epsilon = \{ \epsilon_1, ..., \epsilon_k \}$, then the formula for the validity can be given as follows.
+
 \begin{definition}[Validity]
 \begin{align} \label{eq:validity}
-		validity = 1-  \frac{\# of errors}{m} = 1-  error rate 
+		VAL = \sqrt{ \sum\limits_{i=1}^{k} (ER^{\epsilon_i} -\epsilon_i)^2 }
 \end{align}	 
 \end{definition}
-We note that TCPs are valid in the sense error rate is less than equal to the significance level.
-
+We note that TCPs are valid in the sense error rate is less than equal to the significance level, or equivalently the observed error is less than equal to the expected error.
+We define efficiency in terms of observed fuzziness \cite{vovk2016criteria}, observed fuzziness is defined the sum of all p-values for the incorrect class labels. %For example, for binary classification the efficiency can be computed as follows.
 \begin{definition}[Efficiency]
 \begin{align} \label{eq:efficiency}
-	efficiency = 1-  \frac{\# of Multiples}{m}
+	EFF =\frac{ 1}{m} \sum\limits_{i=1}^{m} \sum\limits_{y_i \neq y }  p_i^y,		
 \end{align}
 \end{definition}
+Note that for the above measure of validity and efficiency, smaller
+values are preferable.
 
 \end{document}
