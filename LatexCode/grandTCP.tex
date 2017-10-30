@@ -3,19 +3,27 @@
 \begin{document}
 
 \section{Unbalanced Aggregated Conformal Prediction}
-Let us consider a binary classification problem, and suppose we have a training dataset $Z$ and  external test data set $X$, or we randomly partition the given dataset into training ($80\%$) and external test set ($20\%$). The algorithm for aggregated TCP from multiple sources is as follows (see Figure 1).
+In this section, we present the proposed aggregation framework called unbalanced aggregated conformal prediction. We propose to aggregate conformal p-values across unbalanced data sources, where the number of sources and the size of each data source may vary. The classical TCP is employed to compute p-values for individual data sources and then these p-values are aggregated to obtain the final p-values. This aggregated predictor is named as Unbalanced Aggregated Conformal Predictor (uACP). 
+
+%For illustration purpose, let us consider a binary classification problem, and 
+Suppose we have a training dataset $Z$ and  external test data set $X$, or we randomly partition the given dataset into training ($80\%$) and external test set ($20\%$). The simple steps  for aggregated TCP, uACP, from multiple sources is as follows. It is also illustrated in Figure \ref{fig:uACP} and Algorithm \ref{algo:uACP}.
 \begin{enumerate}
 
 \item The training data set is randomly split into K parts (disjointly) with varying sizes. For example, Let $Z = \{ z_1 , ..., z_n \} $ be the data set, then we divide the dataset into $S_1, ..., S_K$ such that $Z = \bigcup_{i=1}^K S_i$, $k_i = |S_i|$ and $n = k_1+ ...+k_K$.
 
-\item We compute p-values using  $(X,S_i)$ for each $S_i$, say $p_i$ for each class, then we finally aggregate the k, p-values.  
+\item Compute TCP p-values using the algorithm $TCP(S_i, X)$ for each $S_i$, 
 
-\item We repeat the step 1 and step 2 with different values of K and $k_i's$ say for $q$ times.
+\item Aggregate the $K$, p-values, compute validity and efficiency.  
 
-\item  Then we analyze the $q$ results obtained (this part is not clear yet).
+\item Repeat step 1 to step 3 with different values of K for $q$ times, each one is considered as a uACP. %and $k_i's$ say for $q$ times.
+
+%\item Pairwise compare the $q$ uACP results obtained to see whether the number of sources or different size of the sources make any difference in validity or efficiency. %(this part is not clear yet).
 
 \end{enumerate}
 
+The results obtained for $q$ uACPS are then compared pairwise and are also compared with the pooled (whole) data and (balanced) equal sized partitions. In the following, we describe the study procedure (random sized or equal sized partition) and the parameters (the number and size of the sources) to be investigated in the result section. 
+
+%In the following section, we show results when the procedure is applied to five different datasets. 
 
  \begin{algorithm}[H]
  \textbf{Input:}{ (training dataset:Z, test dataset:X, label set:Y, a nonconformity measure:$\mathcal{A})$}\\
@@ -32,7 +40,7 @@ Let us consider a binary classification problem, and suppose we have a training 
   }
  }
  Aggregate $PValues_i$ from various sources into a set \textbf{p-values}
- \caption{Unbalanced Aggregated Conformal Predictor}
+ \caption{Unbalanced Aggregated Conformal Predictor} \label{algo:uACP}
  \textbf{return \textbf{p-values}}
  \end{algorithm}
  
@@ -109,7 +117,7 @@ Let us consider a binary classification problem, and suppose we have a training 
   \draw[->] (c2)->(p13);
   
 \end{tikzpicture}
-\caption{Multi source aggregated TCP Algorithm}
+\caption{Multi source aggregated TCP Algorithm} \label{fig:uACP}
 \end{figure}
 
 \end{center}
