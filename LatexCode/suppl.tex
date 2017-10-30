@@ -1,0 +1,211 @@
+\documentclass[main]{subfiles}
+
+\begin{document}
+
+\section*{Empirical Results on Individual Dataset}\label{sec:results}
+In this section, we consider real data examples to compare the performances of different flavors of UACP, with different number of sources and different sizes of the sources. We consider seven different scenarios for the number and size of the data sources, we call them different methods.  We apply these different methods to five real datasets. For each dataset, we split the data into ten folds, where each fold consists of a training set and an independent test set.Then we apply these different methods to all ten folds of each five real datasets. In order to compare the various methods, we look at two performance measures validity  and efficiency as defined below. 
+\begin{definition}[Validity]
+\begin{align} \label{eq:validity}
+		VAL = \sqrt{ \sum\limits_{i=1}^{k} (ER^{\epsilon_i} -\epsilon_i)^2 },
+\end{align}	 
+\end{definition}
+where $ER$ is the error rate.
+\begin{definition}[Efficiency]
+\begin{align} \label{eq:efficiency}
+	EFF =\frac{ 1}{m} \sum\limits_{i=1}^{m} \sum\limits_{y_i \neq y }  p_i^y,		
+\end{align}
+\end{definition}
+
+All reported results are based on application of different methods to all ten folds of each five real datasets. For each dataset we consider the following configurations:
+
+\begin{enumerate}
+
+\item Given a dataset, we split the data into ten folds, where each fold consists of a training set (80\%) and an independent test set (20\%).
+
+\item for each folds we split the training dataset into various number of sources, as follow:
+\begin{enumerate}
+	\item Single source or pooled data  where training set is considered as a single source.
+	\item Equal sized sources: training set is randomly partitioned into equal sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We mainly consider 2, 4 and 6 equal sized sources. %in three different settings.
+	\item Unequal sized sources: training set is randomly partitioned into unequal sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We mainly consider 2, 4 and 6 unequal sized sources, and we repeat it five times to get five different set of sizes for each source.
+\end{enumerate}
+
+\end{enumerate}
+
+We repeat the step 1 and step 2 with five different datasets. Then we compare the validity and efficiency for Single source, 2EqualSizedSource, 4EqualSizedSource, 6EqualSizedSource, 2UnequalSizedSource, 4UnequalSizedSource and 6UnequalSizedSource. 
+
+The details of the datasets are given in the following, these data have been taken from the UCI Repository of machine learning batabases: 
+
+ftp://ftp.ics.uci.edu/pub/machine-learning-databases/.
+\newpage
+\subsection{Empirical results on Breast Cancer data}
+This is a real data set with 699 observations on 10 variables and 1 target class with benign or malignant class labels. There are 16 missing attribute values, we drop those observations with missing values. The class distributions are: benign-239 and malignant-444.
+The results for comparing the different methods on Breast Cancer data, by applying the Wilcoxon signed-rank test on validity and efficiency are shown in Figure \ref{fig:testBC}. To quantify the difference between various methods, the box plots are given in Figure \ref{fig:boxplotBC}.
+ \begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/heatmapBC}
+  %\caption{Validity}
+  %\label{fig:valBC}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/heatmapBC_eff}
+  %\caption{Efficiency}
+  %\label{fig:effBC}
+\end{subfigure}%
+\caption{\small Results of Wilcoxon signed-rank tests for two alternative hypotheses relating validity (a) and observed fuzziness (b) with Breast Cancer data. The p-values are shown for the methods in the right column having greater values than the methods in the first row. All significant p-values are marked in red. } \label{fig:testBC}
+\end{figure}
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=6cm,height=3cm]{images/boxplotBC}
+  %\caption{Validity} % \label{fig:boxplotValBC}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=6cm,height=3cm]{images/boxplotBC_eff}
+  %\caption{Efficiency} % \label{fig:boxplotEffBC}
+\end{subfigure}%
+\caption{\small Box plot of validity (a) and observed fuzziness (b) with BC data.} \label{fig:boxplotBC}
+\end{figure}
+
+\subsection{Empirical results on Spambase data}
+This is a data set with 4601 observations on 57 variables and 1 target class with spam or non-spam class labels. The following are the class distributions: spam-2788 and non-spam-1813.
+The results for comparing the different methods on Spambase data, by applying the Wilcoxon signed-rank test on validity and efficiency are shown in Figure \ref{fig:testSpam}. To quantify the difference between various methods the box plots are given in Figure \ref{fig:boxplotSpam}.
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/heatmapSB}
+%  \caption{Validity}   \label{fig:valSpam}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/heatmapSB_eff}
+%  \caption{Efficiency}   \label{fig:effSpam}
+\end{subfigure}%
+\caption{Results of Wilcoxon signed-rank tests for two alternative hypotheses relating validity (a) and observed fuzziness (b) with Spambase data. The p-values are shown for the methods in the right column having greater values than the methods in the first row. All significant p-values are marked in red.}
+\label{fig:testSpam}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=6cm,height=3cm]{images/boxplotSB}
+  \caption{Validity}
+  \label{fig:boxplotValBC}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=6cm,height=3cm]{images/boxplotSB_eff}
+  \caption{Efficiency}
+  \label{fig:boxplotEffBC}
+\end{subfigure}%
+\caption{Box plot of validity (a) and observed fuzziness (b) with Spambase data.} \label{fig:boxplotSpam}
+\end{figure}
+
+\subsection{Empirical results on Mushroom data}
+This is a data set with 8124 observations on 21 variables and 1 target class with edible or non-edible class labels. The class distributions are: edible-3916 and nonedible-4208.
+The results for comparing the different methods on Mushroom data, by applying the Wilcoxon signed-rank test on validity and efficiency, are shown in Figure \ref{fig:testMush}. To quantify the difference between various methods the box plots are given in Figure \ref{fig:boxplotMush}.
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/heatmapMush}
+  %\caption{Validity}   \label{fig:valMush}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/heatmapMush_eff}
+  %\caption{Efficiency}  \label{fig:effMush}
+\end{subfigure}%
+\caption{Results of Wilcoxon signed-rank tests for two alternative hypotheses relating validity (a) and observed fuzziness (b) with Mushroom data. The p-values are shown for the methods in the right column having greater values than the methods in the first row. All significant p-values are marked in red.} \label{fig:testMush}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=6cm,height=3cm]{images/boxplotMush}
+%  \caption{Validity}   \label{fig:valBC}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=6cm,height=3cm]{images/boxplotMush_eff}
+%  \caption{Efficiency}  \label{fig:effBC}
+\end{subfigure}%
+\caption{Box plot of validity (a) and observed fuzziness (b) with Mushroom data.} \label{fig:boxplotMush}
+\end{figure}
+
+\subsection{Empirical results on FOTP data}
+The First Order Theorem Proving (FOTP) is a real data set with 4587 observations (actual training and test sets used) on 51 variables and 1 target class with +1 where no heuristic finds a   proof within the time limit and -1 otherwise.  The class distributions: proof within the time limit-1909 and proof within the time limit-2678. The results for comparing the different methods on FOTP data, by applying the Wilcoxon signed-rank test on validity and efficiency are shown in Figure \ref{fig:testFotp}. To quantify the difference between various methods the box plots are given in Figure \ref{fig:boxplotFotp}.
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/heatmapFOTP}
+%  \caption{Validity}   \label{fig:valFotp}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/heatmapFOTP_eff}
+%  \caption{Efficiency}  \label{fig:effFotp}
+\end{subfigure}%
+\caption{Results of Wilcoxon signed-rank tests for two alternative hypotheses relating validity (a) and observed fuzziness (b) with FOTP data. The p-values are shown for the methods in the right column having greater values than the methods in the first row. All significant p-values are marked in red. Results of statistical tests with Phishing Website data.} \label{fig:testFotp}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=6cm,height=3cm]{images/boxplotFOTP}
+%  \caption{Validity} \label{fig:valBC}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=6cm,height=3cm]{images/boxplotFOTP_eff}
+%  \caption{Efficiency}   \label{fig:effBC}
+\end{subfigure}%
+\caption{Box plot of validity (a) and observed fuzziness (b) with FOTP data.} \label{fig:boxplotFotp}
+\end{figure}
+
+\subsection{Empirical results on Phishing Website data}
+The Fishing Website is a real data set with 2455 observations  on 30 variables and 1 target class with 1 as legitimate and 2 as suspicious class labels.  The class distributions are: legitimate-1362 and suspicious-1093. The results for comparing the different methods on Phishing Website data, by applying the Wilcoxon signed-rank test on validity and efficiency are shown in Figure \ref{fig:testPhish}. To quantify the difference between various methods the box plots are given in Figure \ref{fig:boxplotPhish}.
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/heatmapPhish}
+%  \caption{Validity}   \label{fig:valPhish}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{images/heatmapPhish_eff}
+ % \caption{Efficiency}  \label{fig:effPhish}
+\end{subfigure}%
+\caption{Results of Wilcoxon signed-rank tests for two alternative hypotheses relating validity (a) and observed fuzziness (b) with Phishing Website data. The p-values are shown for the methods in the right column having greater values than the methods in the first row. All significant p-values are marked in red.} \label{fig:testPhish}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=6cm,height=3cm]{images/boxplotPhish}
+ % \caption{Validity}   \label{fig:valBC}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=6cm,height=3cm]{images/boxplotPhish_eff}
+ % \caption{Efficiency}  \label{fig:effBC}
+\end{subfigure}%
+\caption{Box plot of validity (a) and observed fuzziness (b) with Phishing Website data.} \label{fig:boxplotPhish}
+\end{figure}
+
+\end{document}
