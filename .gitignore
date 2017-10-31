@@ -6,4 +6,5 @@
 *.synctex.gz
 *.blg
 *.bbl
+*.spl
 LatexCode/main.pdf
