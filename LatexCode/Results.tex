@@ -61,8 +61,38 @@ tive hypotheses relating validity (a) and observed fuzziness (b) with combining 
 
 
 
+\section{Discussions}
+improve predictions over different sources without explicitly sharing the data, by aggregating conformal predictions computed at individual locations.
+
+not share data
+
+uACP more efficient predictions than individual analyses
+
+1. to investigate if and how the number of data sources and size of the sources affect the aggregated efficiency and validity
+
+Validity: Large model always valid. Individual small models also all valid. uACP less valid overall, but calibration plot (to be added) shows conservative validity for the significance levels 0 to 0.5 which is the interesting region for predictions. This is a known issue with ACP (refer to ACP papers by Lars and Linusson) that needs further research. We settle here with the observation that validity does not seem to be a practical problem for uACP in the interesting significance region.
+
+Efficiency: 
+
+
+2. to evaluate how good both “aggregated equally partitioned” and “aggregated randomly partitioned” perform when compared to the whole (pooled) data set.
+
+Results show that there is no significant difference between 'aggregated equally partitioned' and 'aggregated randomly partitioned'.
+
+3. to evaluate if and under what conditions unbalanced aggregated TCP delivers acceptable results when compared to pooled data
+
+%Results show that pooled is significantly more efficient than all other models, but in absolute numbers the decrease in efficiency is not so large when using an aggregated approach. What is very disappointing however is that it does not seem to be any significant improvement for aggregating when comparing with just picking a single smallTCP. But the boxplots show for 4 and more clearly for 6 partitions that there is higher variance in the smallTCP. But the conclusion I draw from these experiments is that you can throw away a large part of the samples and still get valid and efficient models. Is this really correct?
+
+
+
 \section{Conclusions}
 We propose to aggregate conformal predictions from multiple sources and apply it to the various real life classification datasets. The  method  is  a  straightforward
 generalization of the basic conformal prediction framework to handle multiple data sources that do not require sharing of data. %Our  analysis presents 
 
+
+
+
 \end{document}
+
+
+
