@@ -69,22 +69,23 @@ tive hypotheses relating validity (a) and observed fuzziness (b) with combining 
 
 
 \section{Discussions}
-%Improve predictions over different sources without explicitly sharing the data, by aggregating conformal predictions computed at individual locations. 
-In this section,  we investigate how the number of data sources and size of the sources affect the aggregated efficiency and validity.
+The aim of this study was to improve predictions over different data sources without explicitly sharing the data, by aggregating conformal predictions computed at individual locations. In order to do so, we investigated if and how the number of data sources and size of these affect the aggregated efficiency and validity.
 
-%not share data
+Results in Figure~\ref{fig:testCombined} show that pooled is significantly more efficient than all other models, as would be expected, but in absolute numbers the decrease in efficiency is not so large when using an aggregated approach. When comparing uACP with individual smallTCP, we do not see a significant improvement in efficiency using uACP but we observe a reduced variance, consistent with previous work~\cite{Carlsson:2014qr}, when there are 4 or more partitions. We also observe in Figure~\ref{fig:testCombined} that there is no significant difference between 'aggregated equally partitioned' and 'aggregated randomly partitioned', which would make the method generally applicable regardless of the sizes of individual training sets.
 
 %uACP more efficient predictions than individual analyses
-
 %1. To investigate if and how the number of data sources and size of the sources affect the aggregated efficiency and validity
 
-\subsection{Validity}
-Large model are always valid, see figure  plotted for Spambase dataset. Individual small models also all valid, see Figure for randomly partitioned small TCPs for Spambase dataset. uACP less valid overall, see Figure for randomly partitioned uATCPs for Spambase dataset, but calibration plot shows conservative validity for the significance levels 0 to 0.5 which is the interesting region for predictions. This is a known issue with ACP (refer to ACP papers by Lars and Linusson) that needs further research. We settle here with the observation that validity does not seem to be a practical problem for uACP in the interesting significance region.
+%\subsection{Validity}
+Regarding validity, we observe that the pooled model is always valid, as an example see Figure~\ref{fig:pooledCalibrationPlot} for the Spambase dataset. Further, we see that individual small models also all are valid, see Figure~\ref{fig:valIndividual} for randomly partitioned small TCPs for Spambase dataset. Consistent with previous work by Linusson et al~\cite{Linusson:2017dn} and Carlsson et al.~\cite{Carlsson:2014qr}, uACP is less valid overall, see Figure~\ref{fig:valCombined} for randomly partitioned uATCPs for Spambase dataset, but calibration plot shows conservative validity for the significance levels 0 to 0.5 which is the interesting region for predictions. This is a known issue that requires further research; we settle here with the observation that validity does not seem to be a practical problem for uACP in the interesting significance region.
 
 \begin{figure}[H]
 \begin{center}
-  \includegraphics[scale=0.6]{images/pooledCalibrationPlot}
- \caption{Calibration plot of TCP for one fold of Spambase dataset.}\label{fig:pooledCalibrationPlot}
+  \includegraphics[scale=0.3]{images/pooledCalibrationPlot}
+  \includegraphics[scale=0.3]{images/eqSourceInd}
+  \includegraphics[scale=0.3]{images/eqSourceCombined}
+ \caption{Calibration plot of TCP for one fold of Spambase dataset.}
+ \label{fig:pooledCalibrationPlot}
 \end{center}
 \end{figure}
 
@@ -100,23 +101,22 @@ Large model are always valid, see figure  plotted for Spambase dataset. Individu
   \includegraphics[scale=0.6]{images/eqSourceCombined}
  \caption{Calibration plot of uATCPs for one fold of Spambase dataset. Blue, orange and  green line indicate uATCP from two, four and six source random partitions respectively }\label{fig:valCombined}
 \end{center}
+\label{fig:uACP}
 \end{figure}
 
 
-\subsection{Efficiency}
-2. to evaluate how good both aggregated equally partitioned and aggregated randomly partitioned perform when compared to the whole (pooled) data set.
+%\subsection{Efficiency}
+%2. to evaluate how good both aggregated equally partitioned and aggregated randomly partitioned perform when compared to the whole (pooled) data set.
 
-Results show that there is no significant difference between 'aggregated equally partitioned' and 'aggregated randomly partitioned'.
 
-3. to evaluate if and under what conditions unbalanced aggregated TCP delivers acceptable results when compared to pooled data
+%3. to evaluate if and under what conditions unbalanced aggregated TCP delivers acceptable results when compared to pooled data
 
-%Results show that pooled is significantly more efficient than all other models, but in absolute numbers the decrease in efficiency is not so large when using an aggregated approach. What is very disappointing however is that it does not seem to be any significant improvement for aggregating when comparing with just picking a single smallTCP. But the boxplots show for 4 and more clearly for 6 partitions that there is higher variance in the smallTCP. But the conclusion I draw from these experiments is that you can throw away a large part of the samples and still get valid and efficient models. Is this really correct?
+
 
 
 
 \section{Conclusions}
-We propose to aggregate conformal predictions from multiple sources and apply it to the various real life classification datasets. The  method  is  a  straightforward
-generalization of the basic conformal prediction framework to handle multiple data sources that do not require sharing of data. %Our  analysis presents 
+We present a method to aggregate conformal predictions from multiple sources while preserving data privacy. The method is a generalization of the basic conformal prediction framework to handle multiple data sources without disclosing data between the data sources. Due to its low complexity for implementation, we believe the method will be useful for organizations that wish to make predictions over combined data without disclosing data to each other, such as for drug discovery problems when pharmaceutical companies wishes to establish predictive models of drug safety.
 
 
 
