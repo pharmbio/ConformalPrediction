@@ -7,7 +7,6 @@
 
 \begin{frontmatter}
 
-%\title{A Flexible Framework for Conformal Predictions on Multiple Non-disclosed Datasets}
 \title{Aggregating Predictions on Multiple Non-disclosed Datasets using Conformal Prediction}
 
 \author[label1]{Ola Spjuth}
@@ -26,10 +25,9 @@
 
 
 \begin{abstract}
-The flexible framework for machine learning algorithms called conformal prediction, provides region predictions with guaranteed confidence under mild conditions. %error rate. Transductive version of conformal predictors have been proven to be valid and more information efficient. 
-In this paper, we extend the basic conformal prediction framework to handle %conformal predictions combining results from 
-multiple data sources that do not require sharing of data.
-We propose to aggregate conformal predictions from multiple sources, where transductive conformal predictors are applied on the data sources independently, and their individual predictions are aggregated to form a single prediction on a new example. We demonstrate the method on several data sets, and show that the proposed method produces valid and efficient predictions. We also study the effect of pooled data size, number of data sources, size of each source has on predictions.
+Conformal Prediction is a machine learning methodology that yields valid prediction regions under mild conditions. 
+In this paper, we explore the application of making predictions over multiple data sources of different sizes without disclosing data between the sources.
+We propose that each data source applies a transductive conformal predictor on the local data and the instance to predict independently, and their individual predictions are aggregated to form a unified prediction region. We demonstrate the method on several data sets, and show that the proposed method produces conservatively valid predictions and that the method reduces the variance in the aggregated predictions. We also study the effect that the number of data sources and size of each source has on aggregated predictions, as compared with equally sized sources and pooled data.
 \end{abstract}
 \begin{keyword}
 %% keywords here, in the form: keyword \sep keyword
@@ -38,7 +36,7 @@ We propose to aggregate conformal predictions from multiple sources, where trans
 
 %% MSC codes here, in the form: \MSC code \sep code
 %% or \MSC[2008] code \sep code (2000 is the default)
-Conformal Prediction \sep aggregated predictions \sep non-disclosed data
+conformal prediction \sep machine learning \sep aggregated predictions \sep privacy preservation \sep non-disclosed data
 \end{keyword}
 
 \end{frontmatter}
@@ -46,9 +44,15 @@ Conformal Prediction \sep aggregated predictions \sep non-disclosed data
 \section{Introduction}
 %it is not uncommon to have multiple sources of data .
 
-The increasing volumes of data generated in virtually all scientific and industrial domains presents formidable challenges to store and analyze. Of particular interest is to make use of the information in statistical learning systems (predictive modeling). If data reside in multiple data sources, possibly in different databases or locations, the most common approach is arguable to collect all data intended for model building in a single location, such as a data warehouse or a file system, after which it is subjected to learning algorithms and subsequent predictions. However, if data is large or if the data owners do not allow such pooling of data, this strategy may not be possible. One example is in the pharmaceutical industry where large databases are available at companies, each holding results on e.g. chemical compounds tested against different endpoints in drug discovery projects. This information is valuable and sensitive for these companies, but at the same time there are occasions where companies would want to contribute to predictive models without disclosing the data to others, including pre-competitive initiatives and in interactions with CROs. There are approaches that have been developed towards integrated analysis that do not require sharing of original data, but there are limitations with these. For example, methods for integrated analysis of non-sensitive availability derived from original data has been developed~\cite{Spjuth:2016ly} but these are not suitable in machine learning contexts. Another example is dataSHIELD~\citep{Gaye:2014sf} which comprises a technically advanced computational infrastructure and uses distributed computing and parallelized analysis to enable joint analysis, but is does not support machine learning models. %\todo{CONFIRM THIS}
+The increasing volumes of data generated in virtually all scientific and industrial domains presents formidable challenges to store and analyze. Of particular interest is to make use of the information in statistical learning systems (predictive modeling). If data reside in multiple data sources, possibly in different databases or locations, the most common approach is arguable to collect all data intended for model building in a single location, such as a data warehouse or a file system, after which it is subjected to learning algorithms and subsequent predictions (see Figure~\ref{fig:overview}a). However, if data is large or if the data owners do not allow such pooling of data, this strategy may not be possible. One example is in the pharmaceutical industry where large databases are available at companies, each holding results on e.g. chemical compounds tested against different endpoints in drug discovery projects. This information is valuable and sensitive for these companies, but at the same time there are occasions where companies would want to contribute to predictive models without disclosing the data to others, including pre-competitive initiatives and in interactions with CROs. There are approaches that have been developed towards integrated analysis that do not require sharing of original data, but there are limitations with these. For example, methods for integrated analysis of non-sensitive availability derived from original data has been developed~\cite{Spjuth:2016ly} but these are not suitable in machine learning contexts. Another example is dataSHIELD~\citep{Gaye:2014sf} which comprises a technically advanced computational infrastructure and uses distributed computing and parallelized analysis to enable joint analysis, but is does not support machine learning models. %\todo{CONFIRM THIS}
  
-In this article we propose to improve predictions over different sources without explicitly sharing the data, by aggregating conformal predictions computed at individual locations. 
+ \begin{figure}[b!]
+    \includegraphics[width=0.95\textwidth]{images/fig-overview.png}
+    \caption{\textbf{a}) The most common approach is to collect data from different data sources ($D_1-D_3$) into a single dataset, which then is used to train a model $M$ that can be used to make a prediction $P$ on a query object $Q$. \textbf{b)} The aggregated TCP approach implies that a model $M_n$ is trained at each data source $D_n$, and the query object Q is passed on to each model, and predictions $P_n$ are then aggregated to deliver the resulting prediction $P$. The gray wireframes are used to visualize the different actors taking part in the procedure independent of each other.}
+  \label{fig:overview}
+\end{figure}
+
+In this article we propose to improve predictions over different sources without explicitly sharing the data, by aggregating conformal predictions computed at individual locations (see Figure~\ref{fig:overview}b). 
 Basically, conformal predictors are confidence predictors that results prediction sets for all confidence levels. Thus, conformal prediction is a framework that complements the predictions of machine learning algorithms with reliable measures of confidence.
 Transductive version of conformal predictors have been proven to be valid and more information efficient. In this paper, we extend the basic conformal prediction framework to handle multiple data sources and without sharing of data between sources. We propose to aggregate conformal predictions from multiple sources, where transductive conformal predictors are applied on the multiple data sources and their individual predictions are aggregated to form a single prediction on a new example.
 
@@ -56,12 +60,6 @@ The advantages of this approach of combining conformal predictions across multip
 Firstly, it is more a framework than a method, and it extends the existing framework of conformal prediction for multiple data sources, that do not require sharing of data. Secondly, combined analysis produces much more efficient predictions than individual analyses. This innovative framework is flexible in the sense it supports flexible number and sizes of data sources.
 
 At a high level, our algorithm works as follows. Consider a binary classification problem, and suppose we have a training dataset $Z$ and an external test data $x$. The training data set is randomly and unequally split into K parts. For example, Let $Z = \{ z_1 , ..., z_n \} $ be the data set of $n$ observations, then we divide the dataset into $S_1, ..., S_K$ such that $Z = \bigcup_{i=1}^K S_i$, and $n = k_1+ ...+k_K$, where $k_i = |S_i|$. We compute p-values under TCP framework using the combined dataset  $(S_i,x)$ for each $S_i$. We have K p-values (for each class), now we aggregate (weighted) the k, p-values to obtain a final p-value for each class for the new example $x$. We repeat the process say $q$ times by varying number and sizes of the sources. The final analysis consists of analysing $q$ results which accounts for number as well as size of the data sources.
-
-\begin{figure}[b!]
-    \includegraphics[width=0.95\textwidth]{images/fig-overview.png}
-    \caption{\textbf{a}) The most common approach is to collect data from different data sources ($D_1-D_3$) into a single dataset, which then is used to train a model $M$ that can be used to make a prediction $P$ on a query object $Q$. \textbf{b)} The aggregated TCP approach implies that a model $M_n$ is trained at each data source $D_n$, and the query object Q is passed on to each model, and predictions $P_n$ are then aggregated to deliver the resulting prediction $P$. The gray wireframes are used to visualize the different actors taking part in the procedure independent of each other.}
-  \label{fig:overview}
-\end{figure}
 
 
 
