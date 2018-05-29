@@ -81,27 +81,25 @@ Regarding validity, we observe that the pooled model is always valid, as an exam
 
 \begin{figure}[H]
 \begin{center}
-  \includegraphics[scale=0.3]{images/pooledCalibrationPlot}
-  \includegraphics[scale=0.3]{images/eqSourceInd}
-  \includegraphics[scale=0.3]{images/eqSourceCombined}
- \caption{Calibration plot of TCP for one fold of Spambase dataset.}
- \label{fig:pooledCalibrationPlot}
+  \begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[scale=0.2]{images/pooledCalibrationPlot}
+  \caption{pooled} \label{fig:pooledCalibrationPlot}
+   \end{subfigure}    
+  \begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[scale=0.2]{images/eqSourceInd}
+  \caption{smallTCPs}\label{fig:valIndividual}
+  \end{subfigure}
+  \begin{subfigure}{.3\textwidth}
+  \centering
+  \includegraphics[scale=0.2]{images/eqSourceCombined}
+  \caption{uATCPs}\label{fig:valCombined}
+  \end{subfigure}
+  
+ \caption{Calibration plot for various models. a) Calibration plot of TCP for one fold of Spambase dataset. b) Calibration plot of randomly partitioned small TCPs for one fold of  Spambase dataset. Blue, orange and  green line indicate each small TCP from two, four and six source random partitions respectively. c) Calibration plot of uATCPs for one fold of Spambase dataset. Blue, orange and  green line indicate uATCP from two, four and six source random partitions respectively}
+ 
 \end{center}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-  \includegraphics[scale=0.6]{images/eqSourceInd}
- \caption{Calibration plot of randomly partitioned small TCPs for one fold of  Spambase dataset. Blue, orange and  green line indicate each small TCP from two, four and six source random partitions respectively }\label{fig:valIndividual}
-\end{center}
-\end{figure}
-
-\begin{figure}[H]
-\begin{center}
-  \includegraphics[scale=0.6]{images/eqSourceCombined}
- \caption{Calibration plot of uATCPs for one fold of Spambase dataset. Blue, orange and  green line indicate uATCP from two, four and six source random partitions respectively }\label{fig:valCombined}
-\end{center}
-\label{fig:uACP}
 \end{figure}
 
 
