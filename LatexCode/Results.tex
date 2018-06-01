@@ -3,7 +3,7 @@
 \begin{document}
 
 \section{Empirical Results}\label{sec:results}
-In this section, we consider real data examples to compare the performances of different flavors of UACP, with different number of sources and different sizes of the sources. We consider seven different scenarios for the number and size of the data sources, we call them different methods.  We apply these different methods to five real datasets. For each dataset, we split the data into ten folds, where each fold consists of a training set and an independent test set.Then we apply these different methods to all ten folds of each five real datasets. In order to compare the various methods, we look at the two performance measures validity (\ref{eq:validity}) and efficiency (\ref{eq:efficiency}). %All reported results are based on application of different methods to all ten folds of each five real datasets. 
+In this section, we consider real data examples to compare the performances of different flavors of uACP, with different number of sources and different sizes of the sources. We consider seven different scenarios for the number and size of the data sources, we call them different methods.  We apply these different methods to five real datasets. For each dataset, we split the data into ten folds, where each fold consists of a training set and an independent test set.Then we apply these different methods to all ten folds of each five real datasets. In order to compare the various methods, we look at the two performance measures validity (\ref{eq:validity}) and efficiency (\ref{eq:efficiency}). %All reported results are based on application of different methods to all ten folds of each five real datasets. 
 
 For each dataset we consider the following configurations:
 
@@ -77,7 +77,7 @@ Results in Figure~\ref{fig:testCombined} show that pooled is significantly more 
 %1. To investigate if and how the number of data sources and size of the sources affect the aggregated efficiency and validity
 
 %\subsection{Validity}
-Regarding validity, we observe that the pooled model is always valid, as an example see Figure~\ref{fig:pooledCalibrationPlot} for the Spambase dataset. Further, we see that individual small models also all are valid, see Figure~\ref{fig:valIndividual} for randomly partitioned small TCPs for Spambase dataset. Consistent with previous work by Linusson et al~\cite{Linusson:2017dn} and Carlsson et al.~\cite{Carlsson:2014qr}, uACP is less valid overall, see Figure~\ref{fig:valCombined} for randomly partitioned uATCPs for Spambase dataset, but calibration plot shows conservative validity for the significance levels 0 to 0.5 which is the interesting region for predictions. This is a known issue that requires further research; we settle here with the observation that validity does not seem to be a practical problem for uACP in the interesting significance region.
+Regarding validity, we observe that the pooled model is always valid, as an example see Figure~\ref{fig:pooledCalibrationPlot} for the Spambase dataset. Further, we see that individual small models also all are valid, see Figure~\ref{fig:valIndividual} for randomly partitioned small TCPs for Spambase dataset. Consistent with previous work by Linusson et al~\cite{Linusson:2017dn} and Carlsson et al.~\cite{Carlsson:2014qr}, uACP is less valid overall, see Figure~\ref{fig:valCombined} for randomly partitioned uACPs for Spambase dataset, but calibration plot shows conservative validity for the significance levels 0 to 0.5 which is the interesting region for predictions. This is a known issue that requires further research; we settle here with the observation that validity does not seem to be a practical problem for uACP in the interesting significance region.
 
 \begin{figure}[H]
 \begin{center}
@@ -94,10 +94,10 @@ Regarding validity, we observe that the pooled model is always valid, as an exam
   \begin{subfigure}{.3\textwidth}
   \centering
   \includegraphics[scale=0.2]{images/eqSourceCombined}
-  \caption{uATCPs}\label{fig:valCombined}
+  \caption{uACPs}\label{fig:valCombined}
   \end{subfigure}
   
- \caption{Calibration plot for various models. a) Calibration plot of TCP for one fold of Spambase dataset. b) Calibration plot of randomly partitioned small TCPs for one fold of  Spambase dataset. Blue, orange and  green line indicate each small TCP from two, four and six source random partitions respectively. c) Calibration plot of uATCPs for one fold of Spambase dataset. Blue, orange and  green line indicate uATCP from two, four and six source random partitions respectively}
+ \caption{Calibration plot for various models. a) Calibration plot of TCP for one fold of Spambase dataset. b) Calibration plot of randomly partitioned small TCPs for one fold of  Spambase dataset. Blue, orange and  green line indicate each small TCP from two, four and six source random partitions respectively. c) Calibration plot of uACPs for one fold of Spambase dataset. Blue, orange and  green line indicate uACP from two, four and six source random partitions respectively}
  
 \end{center}
 \end{figure}
