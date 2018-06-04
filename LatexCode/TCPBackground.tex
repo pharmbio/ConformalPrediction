@@ -1,7 +1,7 @@
 \documentclass[main]{subfiles}
 \begin{document}
 \section{Background and Notations}
-This section gives a brief background about TCP and fixes notations and definitions used throughout the paper.
+%This section gives a brief background about TCP and fixes notations and definitions used throughout the paper.
 
 %\subsection{Transductive Conformity Prediction (TCP)}
 %\section*{Notations and Assumptions}
@@ -10,8 +10,8 @@ The typical classification problem is, given a training dataset $Z = \{ z_1 , ..
 %First, we define a transductive non-conformity measure and transductive conformity score in the following.
 
 
-The nonconformity measure is a function that measures the strangeness of an observation. Consider an example of non-conformity measure for binary classification
-using  random forest method \cite{Breiman}, where voting for each class - 
+The nonconformity measure is a function that measures the strangeness of an observation. Consider an example of a non-conformity measure for binary classification
+using the random forest method \citep{Breiman}, where voting for each class - 
 the ratio between the number of trees in the forest voting for a given class divided by
 the total number of tree - is computed as a 
 conformity scores or probabilities for each data point. 
@@ -28,7 +28,7 @@ conformity scores or probabilities for each data point.
 \end{align}
 
 We denote by $\alpha_i(y)$ nonconformity score for $i^{th}$ observation for class $y$. Each component  $\alpha_i(y)$ that corresponds to the sample $(x_i,y_i)$ is computed by
-euqation (\ref{eq:def_nonconformity}) based on the augmented sample  $\{ z_1 , ..., z_n, z_{n+1}=(x_{new},y) \}$. Then p-value as given below, \cite{vovk2005algorithmic},  describes the lack of conformity of the  new observation $x_{new}$ to the training set $Z$. 
+euqation (\ref{eq:def_nonconformity}) based on the augmented sample  $\{ z_1 , ..., z_n, z_{n+1}=(x_{new},y) \}$. The p-value as given below describes the lack of conformity of the  new observation $x_{new}$ to the training set $Z$
  \begin{align*}
  p_0 &= \frac{| \{ z_i \in Z : y_i=0, \alpha_i(0) < \alpha_{new}(0) \} | + u* | \{ z_i \in Z : y_i=0, \alpha_i(0) = \alpha_{new}(0)\} |}{n_0+1} \\
  p_1 &= \frac{| \{ z_i \in Z :  y_i=1, \alpha_i(1) < \alpha_{new}(1) \}  |+u*|  \{ z_i \in Z :  y_i=1, \alpha_i(1) =\alpha_{new}(1) \} |}{n_1+1} ,
@@ -38,13 +38,13 @@ The p-value $p(y)=p_y, y \in Y$ lies in $ \left( \frac{1}{n_y+1},1 \right)$. The
  is, the less likely the true pair is $(x_{new},y)$.
 
  
-Conformal prediction~\citep{vovk2005algorithmic} exists on top of an existing machine learning method and uses available data to determine valid prediction regions for new objects. 
+Conformal prediction provides a layer on top of an existing machine learning method and uses available data to determine valid prediction regions for new objects~\citep{vovk2005algorithmic}. 
 %The  conformal  predictors  exist  on  top  of  standard  machine  learning methods that results in prediction sets for all confidence levels. 
 %The nonconformity measure is a function that measures the strangeness of an observation,which is used to improve the performance of the prediction algorithms. 
-The predicted region of an observation is a subset of $\mathcal{Y}$ , denoted as $\Gamma^{\epsilon} = \{ y \mid p_y > \epsilon \}$, at a significance level $\alpha$. In transductive approach (Algorithm \ref{algo:TCP}), the underlying model must be retrained each time a new test object is obtained. For further details on TCP, we refer to \cite{vapnik1998statistical}, \cite{shafer2008tutorial}, \cite{vovk2005algorithmic} and \cite{balasubramanian2014conformal}. 
+The predicted region of an observation is a subset of $\mathcal{Y}$ , denoted as $\Gamma^{\epsilon} = \{ y \mid p_y > \epsilon \}$, at a significance level $\alpha$. In the transductive approach (Algorithm \ref{algo:TCP}), the underlying model must be retrained each time a new test object is obtained. For further details on TCP, we refer to \cite{vapnik1998statistical}, \cite{shafer2008tutorial}, \cite{vovk2005algorithmic} and \cite{balasubramanian2014conformal}. 
 
 
-
+\vspace{0.3cm}
 \begin{algorithm}[H]
  \caption{\textbf{TCP}} \label{algo:TCP}
  \textbf{Input:}{ (training dataset:$Z$, test data:$x_{new}$, label set:$Y$, a nonconformity measure:$\mathcal{A})$}\\
@@ -67,8 +67,8 @@ The predicted region of an observation is a subset of $\mathcal{Y}$ , denoted as
 
 %The significance is assumed at $\alpha = 0.05$, so we drop the superscript from $\Gamma$ from now on wards. The predictor make an error when it predicts an empty prediction region for a test case $|\Gamma| = 0$.
  
-We consider the following three criterion that measures the quality of a TCP: error rate,
-validity and efficiency. A predictor makes an error when the predicted region does not contain the true label $ y \not\in \Gamma^{\epsilon}$. Given a training dataset $Z$ and an external test set $T$,  and $|T| = m$. Suppose that the TCP gives prediction regions as $\Gamma_1^{\epsilon}, ...., \Gamma_m^{\epsilon}$, then the error rate is defined as follows.
+We consider the following three criteria that measure the quality of a TCP: error rate,
+validity and efficiency. A predictor makes an error when the predicted region does not contain the true label $ y \not\in \Gamma^{\epsilon}$. Given a training dataset $Z$ and an external test set $T$,  and $|T| = m$. Suppose that the TCP gives prediction regions as $\Gamma_1^{\epsilon}, ...., \Gamma_m^{\epsilon}$, then the error rate is defined as 
 
 \begin{definition}[Error rate]
 \begin{align} \label{eq:errorRate}
@@ -77,7 +77,7 @@ validity and efficiency. A predictor makes an error when the predicted region do
 where $y_i$ is the true class label of the $i^{th}$ test case and $\textbf{I}$ is an indicator function. 	
 \end{definition}
 %&\frac{\# of errors}{m}
-In the following, we consider a way of assessing validity of a TCP in terms of deviation of observed from expected error. The deviation from exact validity can be computed as (\cite{carlsson2017comparing}) the Euclidean norm of the difference of the observed error and the expected error for a given set of predefined significance levels. Let us assume a set of significance levels $\epsilon = \{ \epsilon_1, ..., \epsilon_k \}$, then the formula for the validity can be given as follows.
+In the following, we consider a way of assessing validity of a TCP in terms of deviation of observed from expected error. The deviation from exact validity can be computed as the Euclidean norm of the difference of the observed error and the expected error for a given set of predefined significance levels~\citep{carlsson2017comparing}. Let us assume a set of significance levels $\epsilon = \{ \epsilon_1, ..., \epsilon_k \}$, then the formula for the validity can be given as follows.
 
 \begin{definition}[Validity]
 \begin{align} \label{eq:validity}
@@ -87,7 +87,7 @@ In the following, we consider a way of assessing validity of a TCP in terms of d
 %We note that TCPs are valid in the sense error rate is less than equal to the significance level, or equivalently the observed error is less than equal to the expected error.
 
 
-We use obsered fuzziness, \cite{vovk2016criteria}, as our measure of efficiency . The Observed fuzziness is defined as the sum of all p-values for the incorrect class labels. %For example, for binary classification the efficiency can be computed as follows.
+We use observed fuzziness~\citep{vovk2016criteria} as our measure of efficiency,  defined as the sum of all p-values for the incorrect class labels. %For example, for binary classification the efficiency can be computed as follows.
 \begin{definition}[Efficiency]
 \begin{align} \label{eq:efficiency}
 	EFF =\frac{ 1}{m} \sum\limits_{i=1}^{m} \sum\limits_{y_i \neq y }  p_i^y,		

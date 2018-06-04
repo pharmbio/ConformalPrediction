@@ -2,11 +2,11 @@
 
 \begin{document}
 
-\section{Unbalanced Aggregated Conformal Prediction}
-In this section, we present the proposed aggregation method called unbalanced aggregated conformal prediction. We propose to aggregate conformal p-values across unbalanced data sources, where the number of sources and the size of each data source may vary. The classical TCP is employed to compute p-values for individual data sources and then these p-values are aggregated to obtain the final p-values. This aggregated predictor is named as Unbalanced Aggregated Conformal Predictor (uACP). 
+\section{Non-Disclosed Aggregated Conformal Prediction}
+In this section, we present the proposed aggregation method called unbalanced aggregated conformal prediction. We propose to aggregate conformal p-values across potentially unbalanced data sources, where the number of sources and the size of each data source may vary, and where data is not disclosed between the data sources. The classical TCP is employed to compute p-values for individual data sources and then these p-values are aggregated to obtain the final p-values. This aggregated predictor is named Non-Disclosed Aggregated Conformal Predictor (NDACP). 
 
 %For illustration purpose, let us consider a binary classification problem, and 
-Suppose we have a training dataset $Z$ and  external test data set $X$, or we randomly partition the given dataset into training ($80\%$) and external test set ($20\%$). The simple steps  for aggregated TCP, uACP, from multiple sources is as follows. It is also illustrated in Figure \ref{fig:uACP} and Algorithm \ref{algo:uACP}.
+Suppose we have a training dataset $Z$ and  external test data set $X$, or we randomly partition the given dataset into training ($80\%$) and external test set ($20\%$). The simple steps for NDACP from multiple sources is as follows. It is also illustrated in Figure \ref{fig:uACP} and Algorithm \ref{algo:uACP}.
 \begin{enumerate}
 
 \item The training data set is randomly split into K parts (disjointly) with varying sizes. For example, Let $Z = \{ z_1 , ..., z_n \} $ be the data set, then we divide the dataset into $S_1, ..., S_K$ such that $Z = \bigcup_{i=1}^K S_i$, $k_i = |S_i|$ and $n = k_1+ ...+k_K$.
@@ -15,13 +15,13 @@ Suppose we have a training dataset $Z$ and  external test data set $X$, or we ra
 
 \item Aggregate the $K$, p-values, compute validity and efficiency.  
 
-\item Repeat step 1 to step 3 with different values of K for $q$ times, each one is considered as a uACP. %and $k_i's$ say for $q$ times.
+\item Repeat step 1 to step 3 with different values of K for $q$ times, each one is considered as a NDACP. %and $k_i's$ say for $q$ times.
 
 %\item Pairwise compare the $q$ uACP results obtained to see whether the number of sources or different size of the sources make any difference in validity or efficiency. %(this part is not clear yet).
 
 \end{enumerate}
 
-The results obtained for $q$ uACPS are then compared pairwise and are also compared with the pooled (whole) data and (balanced) equal sized partitions. In the following, we describe the study procedure (random sized or equal sized partition) and the parameters (the number and size of the sources) to be investigated in the result section. 
+The results obtained for $q$ NDACP are then compared pairwise and also compared with the pooled (total) data and equal (balanced) sized partitions. Below we describe the study procedure (random sized or equal sized partition) and the parameters (the number and size of the sources) to be investigated in the result section. 
 
 %In the following section, we show results when the procedure is applied to five different datasets. 
 
@@ -40,7 +40,7 @@ The results obtained for $q$ uACPS are then compared pairwise and are also compa
   }
  }
  Aggregate $PValues_i$ from various sources into a set \textbf{p-values}
- \caption{Unbalanced Aggregated Conformal Predictor} \label{algo:uACP}
+ \caption{Non-Disclosed Aggregated Conformal Prediction (NDACP)} \label{algo:uACP}
  \textbf{return \textbf{p-values}}
  \end{algorithm}
  
@@ -121,5 +121,6 @@ The results obtained for $q$ uACPS are then compared pairwise and are also compa
 \end{figure}
 
 \end{center}
+
 
 \end{document}

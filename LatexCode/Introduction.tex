@@ -25,9 +25,9 @@
 
 
 \begin{abstract}
-Conformal Prediction is a machine learning methodology that yields valid prediction regions under mild conditions. 
-In this paper, we explore the application of making predictions over multiple data sources of different sizes without disclosing data between the sources.
-We propose that each data source applies a transductive conformal predictor on the local data and the instance to predict independently, and their individual predictions are aggregated to form a unified prediction region. We demonstrate the method on several data sets, and show that the proposed method produces conservatively valid predictions and that the method reduces the variance in the aggregated predictions. We also study the effect that the number of data sources and size of each source has on aggregated predictions, as compared with equally sized sources and pooled data.
+Conformal Prediction is a machine learning methodology that prodiuces valid prediction regions under mild conditions. 
+In this paper we explore the application of making predictions over multiple data sources of different sizes without disclosing data between the sources.
+We propose that each data source applies a transductive conformal predictor independently using the local data, and that the individual predictions are then aggregated to form a combined prediction region. We demonstrate the method on several data sets, and show that the proposed method produces conservatively valid predictions and reduces the variance in the aggregated predictions. We also study the effect that the number of data sources and size of each source has on aggregated predictions, as compared with equally sized sources and pooled data.
 \end{abstract}
 \begin{keyword}
 %% keywords here, in the form: keyword \sep keyword
@@ -44,7 +44,7 @@ conformal prediction \sep machine learning \sep aggregated predictions \sep priv
 \section{Introduction}
 %it is not uncommon to have multiple sources of data .
 
-The increasing volumes of data generated in virtually all scientific and industrial domains presents formidable challenges to store and analyze. Of particular interest is to make use of the information in statistical learning systems (predictive modeling). If data reside in multiple data sources, possibly in different databases or locations, the most common approach is arguable to collect all data intended for model building in a single location, such as a data warehouse or a file system, after which it is subjected to learning algorithms and subsequent predictions (see Figure~\ref{fig:overview}a). However, if data is large or if the data owners do not allow such pooling of data, this strategy may not be possible. One example is in the pharmaceutical industry where large databases are available at companies, each holding results on e.g. chemical compounds tested against different endpoints in drug discovery projects. This information is valuable and sensitive for these companies, but at the same time there are occasions where companies would want to contribute to predictive models without disclosing the data to others, including pre-competitive initiatives and in interactions with CROs. There are approaches that have been developed towards integrated analysis that do not require sharing of original data, but there are limitations with these. For example, methods for integrated analysis of non-sensitive availability derived from original data has been developed~\cite{Spjuth:2016ly} but these are not suitable in machine learning contexts. Another example is dataSHIELD~\citep{Gaye:2014sf} which comprises a technically advanced computational infrastructure and uses distributed computing and parallelized analysis to enable joint analysis, but does not support machine learning models. %\todo{CONFIRM THIS}
+The increasing volumes of data generated in virtually all scientific and industrial domains presents formidable challenges to store and analyze. Of particular interest is to make use of the information in statistical learning systems with the objective to make predictions on future objects. If data reside in multiple data sources, possibly in different databases or geographical locations, the most common approach is to collect all data intended for model building in a single location, such as a data warehouse or a file system, after which it is subjected to learning algorithms and subsequent predictions (see Figure~\ref{fig:overview}a). However, if data is large or if the data owners do not allow such pooling of data, this strategy may not be possible. One example is in the pharmaceutical industry where large databases are available at companies, each holding results on e.g. chemical compounds tested against different endpoints in drug discovery projects. This information is valuable and sensitive for these companies, but at the same time there are occasions where companies would want to contribute to predictive models without disclosing the data to others, such as in collaborative efforts or precompetitive alliances. There are approaches that have been developed towards integrated analysis that do not require sharing of original data, but these come with limitations. For example, methods for integrated analysis of non-sensitive availability data derived from original data has been developed~\citep{Spjuth:2016ly} but these are not suitable in machine learning contexts. Another example is dataSHIELD~\citep{Gaye:2014sf} which comprises a technically advanced computational infrastructure and uses distributed computing and parallelized analysis to enable joint analysis, but does not support machine learning models. Federated learning models such as the ones proposed by \cite{Shokri:2015os} for deep learning are not generally applicable to other machine learning methods and also complex to implement.
  
  \begin{figure}[b!]
     \includegraphics[width=0.95\textwidth]{images/fig-overview.png}
@@ -52,17 +52,16 @@ The increasing volumes of data generated in virtually all scientific and industr
   \label{fig:overview}
 \end{figure}
 
-In this article we propose to improve predictions over different sources without explicitly sharing the data, by aggregating conformal predictions computed at individual locations (see Figure~\ref{fig:overview}b). 
-Basically, conformal predictors are confidence predictors that results in prediction sets for all confidence levels. Thus, conformal prediction is a framework that complements the predictions of machine learning algorithms with reliable measures of confidence.
-The transductive version of conformal predictors has been proven to be valid and more information efficient. In this paper, we extend the basic conformal prediction framework to handle multiple data sources and without sharing of data between sources. We propose to aggregate conformal predictions from multiple sources, where transductive conformal predictors are applied on the multiple data sources and their individual predictions are aggregated to form a single prediction on a new example.
-
-The advantages of this approach of combining conformal predictions across multiple sources are two fold. 
-Firstly, it extends the existing framework of conformal prediction to multiple data sources, that do not require sharing of data. Secondly, combined analysis produces much more efficient predictions than individual analyses. This innovative framework is flexible in the sense it supports flexible number and sizes of data sources.
+In this manuscript we propose a light-weight approach to improve predictions over different sources without explicitly sharing the data, by means of aggregating conformal predictions computed at individual locations (see Figure~\ref{fig:overview}b). 
+Conformal predictors provide a layer on top of underlying machine learning algorithms, and produces results with valid measures of confidence~\cite{vovk2005algorithmic}.
+Here we extend the basic conformal prediction framework to handle multiple data sources and without sharing of data between sources. We propose to aggregate conformal predictions from multiple sources, where transductive conformal predictors (TCP) are applied on the multiple data sources and their individual predictions are aggregated to form a single prediction on a new example.
+The advantages of this approach are two-fold: 
+Firstly, it extends the existing framework of conformal prediction to multiple data sources that do not require sharing of data between the sources. Secondly, combined learning produces more efficient predictions than individual learning. The method is flexible in the sense that it supports flexible number and sizes of data sources.
 
 
 %We illustrate the method using simulated and real data sets, and we show that the proposed method produces much more efficient predictions than individual analsys.
 
-The contributions of this paper is summarized as follows:
+Our main research objectives in this paper are summarized as follows:
 
 \begin{enumerate}
 \item to investigate if and how the number of data sources and size of the sources affect the aggregated efficiency and validity
@@ -76,6 +75,6 @@ The contributions of this paper is summarized as follows:
 
 \end{enumerate}
 
-The organization of the paper is as follows. In section 2, we introduce the background concepts and notations, used throughout the paper. In Section 3, we will introduce the concept of aggregating conformal predictions from multiple sources. In Section 4, we discuss the statistical properties of aggregated conformal predictions from multiple sources. In Section 5, we perform some numerical analysis on simulated and real datasets. Finally, in Section 6, the summary of the papery is provided.
+The organization of the paper is as follows: In section 2, we introduce the background concepts and notations used throughout the paper. In Section 3, we introduce the concept of aggregating conformal predictions from multiple sources. In Section 4, we discuss the statistical properties of aggregated conformal predictions from multiple sources. In Section 5, we perform numerical analysis on simulated and real datasets. Finally, in Section 6, a summary of the paper is provided.
 %We have also included an appendix that reviews the most relevant aspects about TCP, ICP, CCP and ACP.\todo{do we really have to do this?}
 \end{document}
