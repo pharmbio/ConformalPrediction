@@ -4,8 +4,37 @@
 \begin{document}
 
 
-\section{Datasets}\label{sec:datasets}
-TBC, maybe a table with their sizes?
+\section{Datasets from UCI Repository}\label{sec:datasets}
+We used five different binary classification datasets from UCI repository in our experiments, details of which are given in Table \ref{tab:datasets}. %All the datasets are binary class problems with class labels (0, 1). 
+
+%The Spambase dataset contains 4601 observations and 57 features with class label (spam or non-Spam).  The Wisconsin Breast Cancer (Original) Dataset contains 699 observation, 10 features and class labels benign and malignant. The Mushroom dataset  contains 812 observations, 12 features that describes its physical characteristics, and class labels poisonous or edible. The First-order theorem proving dataset contains  6118  observations, 51 features: Given a theorem, predict which of five heuristics will give the fastest proof when used by a first-order prover.
+ 
+	
+%
+%This dataset collected mainly from: PhishTank archive, MillerSmiles archive, Googleâ€™s searching operators.
+% mushrooms described in terms of physical characteristics; classification: poisonous or edible
+
+
+\begin{table} [h!] 
+\caption{Description of the datasets from UCI repository that are used in the experiments.} \centering
+\vspace{1em}
+\begin{tabular}{llllc}
+\toprule
+Dataset && Observations & \# Features \\
+\midrule
+Spambase (SB) & & 4601 & 57 \\
+\hline
+Breast Cancer Wisconsin (BC)  & & 699 & 10 \\
+\hline
+Mushroom (Mush)& & 8124 & 22 \\
+\hline
+ First-order theorem proving (FOTP) & & 6118 & 51 \\
+\hline
+Phishing Websites (Phish) & & 2456 & 30 \\
+
+\bottomrule
+\end{tabular}\label{tab:datasets}
+\end{table}
 
 
 
@@ -15,13 +44,13 @@ In this section we compare the performances of NDACP in seven different scenario
 %For each dataset we consider the following configurations:
 \begin{enumerate}
 
-\item \todo{Randomly?} split \todo{Randomize?} the dataset into ten folds, where each fold consists of a training set (80\%) and an independent test set (20\%).  \todo{Either 5 folds or 90/10?}
+\item We randomly split the dataset into ten folds, and further we split each fold into a training set (80\%) and an independent test set (20\%). % \todo{Either 5 folds or 90/10?}
 
-\item For each fold we split the training dataset into different number of sources:
+\item The training set of each fold is then split randomly into different number of sources according to the model under consideration as follows:
 \begin{enumerate}
-	\item Pooled source: Entire training set is considered as one single data source.
-	\item Equally sized sources: Training set is randomly partitioned into equally sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We consider 2, 4 and 6 equal sized sources. %in three different settings.
-	\item Unequally sized sources: Training set is randomly partitioned into unequally sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We consider 2, 4 and 6 unequally sized sources, and we repeat it five times to get five different set of sizes for each source.
+	\item Pooled source (pooled): Entire training set is considered as one single data source.
+	\item Equally sized sources (EqSrc): Training set is randomly partitioned into equally sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We consider 2, 4 and 6 equal sized sources. %in three different settings.
+	\item Unequally sized sources (RandSrc): Training set is randomly partitioned into unequally sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We consider 2, 4 and 6 unequally sized sources, and we repeat it five times to get five different set of sizes for each source.
 
 \end{enumerate}
 
