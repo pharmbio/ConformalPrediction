@@ -3,7 +3,7 @@
 \begin{document}
 
 \section{Non-Disclosed Aggregated Conformal Prediction}
-In this section, we present the proposed aggregation method called unbalanced aggregated conformal prediction. We propose to aggregate conformal p-values across potentially unbalanced data sources, where the number of sources and the size of each data source may vary, and where data is not disclosed between the data sources. The classical TCP is employed to compute p-values for individual data sources and then these p-values are aggregated to obtain the final p-values. This aggregated predictor is named Non-Disclosed Aggregated Conformal Predictor (NDACP). 
+In this section, we present the proposed aggregation method called non-disclosed aggregated conformal prediction. We propose to aggregate conformal p-values across potentially unbalanced data sources, where the number of sources and the size of each data source may vary, and where data is not disclosed between the data sources. The classical TCP is employed to compute p-values for individual data sources and then these p-values are aggregated to obtain the final p-values. This aggregated predictor is named Non-Disclosed Aggregated Conformal Predictor (NDACP). 
 
 %For illustration purpose, let us consider a binary classification problem, and 
 Suppose we have a training dataset $Z$ and  external test data set $X$, or we randomly partition the given dataset into training ($80\%$) and external test set ($20\%$). The simple steps for NDACP from multiple sources is as follows. It is also illustrated in Figure \ref{fig:uACP} and Algorithm \ref{algo:uACP}.
@@ -29,7 +29,7 @@ The results obtained for $q$ NDACP are then compared pairwise and also compared 
  \textbf{Input:}{ (training dataset:Z, test dataset:X, label set:Y, a nonconformity measure:$\mathcal{A})$}\\
  \textbf{Output:}{\textbf{ Aggregated p-values} }\\
  \textbf{Initialization\;}
- Unequal size partition: Partition training.data randomly and unequally into K parts, $S_1, ..., S_K$ ;\\ %such that $Z = \bigcup_{i=1}^K S_i$, $k_i = |S_i|$ and $n = k_1+ ...+k_K$, where n is size of the training.data \\
+ Unequal size partition: Partition training data randomly and unequally into K parts, $S_1, ..., S_K$ ;\\ %such that $Z = \bigcup_{i=1}^K S_i$, $k_i = |S_i|$ and $n = k_1+ ...+k_K$, where n is size of the training.data \\
  \textbf{Steps\;}
  \For{each $S_i$,  $i \in \{ 1,...,K\} $ }{
  	\For{each observation $x_j \in X$}{

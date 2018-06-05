@@ -25,8 +25,8 @@
 
 
 \begin{abstract}
-Conformal Prediction is a machine learning methodology that prodiuces valid prediction regions under mild conditions. 
-In this paper we explore the application of making predictions over multiple data sources of different sizes without disclosing data between the sources.
+Conformal Prediction is a machine learning methodology that produces valid prediction regions under mild conditions. 
+In this paper, we explore the application of making predictions over multiple data sources of different sizes without disclosing data between the sources.
 We propose that each data source applies a transductive conformal predictor independently using the local data, and that the individual predictions are then aggregated to form a combined prediction region. We demonstrate the method on several data sets, and show that the proposed method produces conservatively valid predictions and reduces the variance in the aggregated predictions. We also study the effect that the number of data sources and size of each source has on aggregated predictions, as compared with equally sized sources and pooled data.
 \end{abstract}
 \begin{keyword}
@@ -52,8 +52,8 @@ The increasing volumes of data generated in virtually all scientific and industr
   \label{fig:overview}
 \end{figure}
 
-In this manuscript we propose a light-weight approach to improve predictions over different sources without explicitly sharing the data, by means of aggregating conformal predictions computed at individual locations (see Figure~\ref{fig:overview}b). 
-Conformal predictors provide a layer on top of underlying machine learning algorithms, and produces results with valid measures of confidence~\cite{vovk2005algorithmic}.
+In this manuscript, we propose a light-weight approach to improve predictions over different sources without explicitly sharing the data, by means of aggregating conformal predictions computed at individual locations (see Figure~\ref{fig:overview}b). 
+Conformal predictors provide a layer on top of underlying machine learning algorithms, and produce results with valid measures of confidence~\cite{vovk2005algorithmic}.
 Here we extend the basic conformal prediction framework to handle multiple data sources and without sharing of data between sources. We propose to aggregate conformal predictions from multiple sources, where transductive conformal predictors (TCP) are applied on the multiple data sources and their individual predictions are aggregated to form a single prediction on a new example.
 The advantages of this approach are two-fold: 
 Firstly, it extends the existing framework of conformal prediction to multiple data sources that do not require sharing of data between the sources. Secondly, combined learning produces more efficient predictions than individual learning. The method is flexible in the sense that it supports flexible number and sizes of data sources.
@@ -75,6 +75,6 @@ Our main research objectives in this paper are summarized as follows:
 
 \end{enumerate}
 
-The organization of the paper is as follows: In section 2, we introduce the background concepts and notations used throughout the paper. In Section 3, we introduce the concept of aggregating conformal predictions from multiple sources. In Section 4, we discuss the statistical properties of aggregated conformal predictions from multiple sources. In Section 5, we perform numerical analysis on simulated and real datasets. Finally, in Section 6, a summary of the paper is provided.
+The organization of the paper is as follows. In section 2, we introduce the background concepts and notations used throughout the paper. In Section 3, we introduce the concept of aggregating conformal predictions from multiple sources. In Section 4, we discuss the statistical properties of aggregated conformal predictions from multiple sources. In Section 5, we perform numerical analysis on simulated and real datasets. Finally, in Section 6, a summary of the paper is provided.
 %We have also included an appendix that reviews the most relevant aspects about TCP, ICP, CCP and ACP.\todo{do we really have to do this?}
 \end{document}
