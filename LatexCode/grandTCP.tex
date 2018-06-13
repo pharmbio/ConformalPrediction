@@ -2,48 +2,111 @@
 
 \begin{document}
 
-\section{Non-Disclosed Aggregated Conformal Prediction}
-In this section, we present the proposed aggregation method called non-disclosed aggregated conformal prediction. We propose to aggregate conformal p-values across potentially unbalanced data sources, where the number of sources and the size of each data source may vary, and where data is not disclosed between the data sources. The classical TCP is employed to compute p-values for individual data sources and then these p-values are aggregated to obtain the final p-values. This aggregated predictor is named Non-Disclosed Aggregated Conformal Predictor (NDACP). 
-
+\subsection{Non-Disclosed aggregated Conformal Prediction}
+%In this section, we present the proposed aggregation method called non-disclosed aggregated conformal prediction. 
+%We propose to aggregate conformal p-values across potentially unbalanced data sources, where the number of sources and the size of each data source may vary, and where data is not disclosed between the data sources. 
+%
 %For illustration purpose, let us consider a binary classification problem, and 
-Suppose we have a training dataset $Z$ and  external test data set $X$, or we randomly partition the given dataset into training ($80\%$) and external test set ($20\%$). The simple steps for NDACP from multiple sources is as follows. It is also illustrated in Figure \ref{fig:uACP} and Algorithm \ref{algo:uACP}.
+Suppose we have $K$ data sources, each with a training dataset $D_k$ of arbitrary sizes where $k \in {1,...,K}$. For a new object $x_{new}$, the objective is to aggregate p-values at the location $A$ that were computed in each data source using Mondrian TCP with random forest (Algorithm~\ref{algo:TCP}). We name this aggregated predictor Non-Disclosed aggregated Conformal Predictor (NDCP), with details described in Algorithm~\ref{algo:NDCP}. The result is a set of aggregated p-values, where no data training data is disclosed between the data sources and between the data sources and location $A$, but the only information that is transmitted between data sources and $A$ is the object to predict and the resulting p-values.
+
+ \begin{algorithm}[H]
+ \textbf{Input:}{ $D_1,...D_K  ;  x_{new}$}\\
+ \textbf{Output:}{\textbf{ Aggregated p-values} }\\
+ \textbf{Steps\;}
+ \For{each $D_k$,  $k \in \{ 1,...,K\} $ }{
+	Compute $p^0$ and $p^1$ using Algorithm 1 at each data source\\
+	Transfer $p^0$ and $p^1$ to location $A$\\
+	$\bar{p}^0 = \bar{p}^0 + p^0$\\
+	$\bar{p}^1 = \bar{p}^1 + p^1$\\  
+ }
+$\bar{p}_{new}^0 = \bar{p}^0 / K$\\   
+$\bar{p}_{new}^1 = \bar{p}^1 / K$\\   
+ \caption{Non-Disclosed Conformal Prediction (NDCP)} \label{algo:NDCP}
+ \textbf{return} $\bar{p}_{new}^0$ , $\bar{p}_{new}^1$
+ \end{algorithm}
+ 
+
+
+\begin{table} [b]
+\caption{Description of the datasets from UCI repository that are used in the evaluation.} \centering
+\vspace{1em}
+\begin{tabular}{llllc}
+\toprule
+Dataset && Observations & \# Features \\
+\midrule
+Spambase (SB) & & 4601 & 57 \\
+\hline
+Breast Cancer Wisconsin (BC)  & & 699 & 10 \\
+\hline
+Mushroom (Mush)& & 8124 & 22 \\
+\hline
+ First-order theorem proving (FOTP) & & 6118 & 51 \\
+\hline
+Phishing Websites (Phish) & & 2456 & 30 \\
+
+\bottomrule
+\end{tabular}\label{tab:datasets}
+\end{table}
+
+
+
+\section{Evaluation}
+
+We evaluate NDCP on five binary classification datasets from the UCI repository (Table \ref{tab:datasets}) that are randomly partitioned into a training set ($80\%$) and a test set ($20\%$). The steps are described below, and also illustrated in Figure \ref{fig:uACP}.
+
+%Add comments on random forest, what package and version we used
+
 \begin{enumerate}
 
-\item The training data set is randomly split into K parts (disjointly) with varying sizes. For example, Let $Z = \{ z_1 , ..., z_n \} $ be the data set, then we divide the dataset into $S_1, ..., S_K$ such that $Z = \bigcup_{i=1}^K S_i$, $k_i = |S_i|$ and $n = k_1+ ...+k_K$.
+\item The training data set is randomly split into K parts (disjointly) with varying sizes. For example, Let $Z = \{ z_1 , ..., z_n \} $ be the data set, then we divide the dataset into $S_1, ..., S_K$ such that $Z = \bigcup_{i=1}^K S_i$, $k_i = |S_i|$ and $n = k_1+ ...+k_K$. More specifically, the following types of partitions were made to create different scenarios, with one to compare with unpartitioned data (a TCP trained on all data):
 
-\item Compute TCP p-values using the algorithm $TCP(S_i, X)$ for each $S_i$, 
+\begin{enumerate}
+	\item Pooled source (pooled): Entire training set is considered as one single data source.
+	\item Equally sized sources (EqSrc): Training set is randomly partitioned into equally sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We consider 2, 4 and 6 equal sized sources. %in three different settings.
+	\item Unequally sized sources (RandSrc): Training set is randomly partitioned into unequally sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We consider 2, 4 and 6 unequally sized sources, and we repeat it five times to get five different set of sizes for each source.
 
-\item Aggregate the $K$, p-values, compute validity and efficiency.  
+\end{enumerate}
 
-\item Repeat step 1 to step 3 with different values of K for $q$ times, each one is considered as a NDACP. %and $k_i's$ say for $q$ times.
+
+\item Predict p-values for the different scenarios using Algorithm~\ref{algo:NDCP}
+
+\item Perform evaluation based on validity and efficiency
+
+\item Repeat step 1 to 3  five times.
 
 %\item Pairwise compare the $q$ uACP results obtained to see whether the number of sources or different size of the sources make any difference in validity or efficiency. %(this part is not clear yet).
 
 \end{enumerate}
 
-The results obtained for $q$ NDACP are then compared pairwise and also compared with the pooled (total) data and equal (balanced) sized partitions. Below we describe the study procedure (random sized or equal sized partition) and the parameters (the number and size of the sources) to be investigated in the result section. 
+
+%We evaluated NDCP in different scenarios, varying the number of data sources and size of each data source, and performed the evaluation on all five datasets: %, according to the following configurations: %Then we apply these different methods to all ten folds of each five datasets. In order to compare the various methods, we study validity (\ref{eq:validity}) and efficiency (\ref{eq:efficiency}). %All reported results are based on application of different methods to all ten folds of each five real datasets. 
+%
+%For each dataset we consider the following configurations:
+%\begin{enumerate}
+
+%\item We randomly split the dataset into ten folds, and further we split each fold into a training set (80\%) and an independent test set (20\%). % \todo{Either 5 folds or 90/10?}
+
+%\item The training set of each fold is then split randomly into different number of sources according to the model under consideration as follows:
+%\begin{itemize}
+%	\item Pooled source (pooled): Entire training set is considered as one single data source.
+%	\item Equally sized sources (EqSrc): Training set is randomly partitioned into equally sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We consider 2, 4 and 6 equal sized sources. %in three different settings.
+%	\item Unequally sized sources (RandSrc): Training set is randomly partitioned into unequally sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We consider 2, 4 and 6 unequally sized sources, and we repeat it five times to get five different set of sizes for each source.
+%
+%\end{itemize}
+
+%\end{enumerate}
+
+Results were combined for each scenario over all datasets, and then a pairwise comparison using a Wilcoxon signed-rank test on validity and efficiency for all scenarios were performed.
+
+
+
+
+
+%The results obtained for $q$ NDCP are then compared pairwise and also compared with the pooled (total) data and equal (balanced) sized partitions. Below we describe the study procedure (random sized or equal sized partition) and the parameters (the number and size of the sources) to be investigated in the result section. 
+
 
 %In the following section, we show results when the procedure is applied to five different datasets. 
 
- \begin{algorithm}[H]
- \textbf{Input:}{ (training dataset:Z, test dataset:X, label set:Y, a nonconformity measure:$\mathcal{A})$}\\
- \textbf{Output:}{\textbf{ Aggregated p-values} }\\
- \textbf{Initialization\;}
- Unequal size partition: Partition training data randomly and unequally into K parts, $S_1, ..., S_K$ ;\\ %such that $Z = \bigcup_{i=1}^K S_i$, $k_i = |S_i|$ and $n = k_1+ ...+k_K$, where n is size of the training.data \\
- \textbf{Steps\;}
- \For{each $S_i$,  $i \in \{ 1,...,K\} $ }{
- 	\For{each observation $x_j \in X$}{
- 		Compute p-values by using \textbf{TCP} algorithm:\\
- 		 
-  		$ PValues_i =  \textbf{TCP}(S_i, x_i, Y , \mathcal{A})$;\\
-  	
-  }
- }
- Aggregate $PValues_i$ from various sources into a set \textbf{p-values}
- \caption{Non-Disclosed Aggregated Conformal Prediction (NDACP)} \label{algo:uACP}
- \textbf{return \textbf{p-values}}
- \end{algorithm}
- 
  \usetikzlibrary{arrows,shapes,positioning,shadows,trees}
 
 \tikzset{
@@ -117,7 +180,7 @@ The results obtained for $q$ NDACP are then compared pairwise and also compared 
   \draw[->] (c2)->(p13);
   
 \end{tikzpicture}
-\caption{Multi source aggregated TCP Algorithm} \label{fig:uACP}
+\caption{Evaluation of NDCP Algorithm for a given dataset} \label{fig:uACP}
 \end{figure}
 
 \end{center}

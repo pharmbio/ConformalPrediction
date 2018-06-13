@@ -1,74 +1,85 @@
 \documentclass[main]{subfiles}
+
 \begin{document}
-\section{Background and Notations}
+\section{Methods}
+
+\subsection{Conformal prediction}
 %This section gives a brief background about TCP and fixes notations and definitions used throughout the paper.
 
 %\subsection{Transductive Conformity Prediction (TCP)}
 %\section*{Notations and Assumptions}
-The object space is denoted by $\mathcal{X} \in \mathbb{R}^p$, where $p$ is the number of features, and  label space is denoted by $\mathcal{Y} \in \{ 0,1 \}$. We assume that each observation consists of an object and its label, and its space is given as $\mathcal{Z} := \mathcal{X} \times \mathcal{Y}$. %are fixed throughout the article. 
-The typical classification problem is, given a training dataset $Z = \{ z_1 , ..., z_n \} $ -- where $n$ is the number of observations in the training set, and each observation $z_i = (x_i, y_i)$ are labeled observations -- we want to predict the label of a new object $x_{new}$ whose label is unknown. We also assume the exchangeability of observations throughout the paper.
+The object space is denoted by $\mathcal{X} \in \mathbb{R}^p$, where $p$ is the number of features, and  label space is denoted by $\mathcal{Y} \in \{ 0,1 \}$. We assume that each example consists of an object and its label, and its space is given as $\mathcal{Z} := \mathcal{X} \times \mathcal{Y}$. %are fixed throughout the article. 
+The typical classification problem is, given a training dataset $Z = \{ z_1 , ..., z_n \} $ -- where $n$ is the number of examples in the training set, and each example $z_i = (x_i, y_i)$ are labeled examples -- we want to predict the label of a new object $x_{new}$ whose label is unknown. We also assume the exchangeability of examples throughout the paper.
 %First, we define a transductive non-conformity measure and transductive conformity score in the following.
 
 
-The nonconformity measure is a function that measures the strangeness of an observation. Consider an example of a non-conformity measure for binary classification
-using the random forest method \citep{Breiman}, where voting for each class - 
-the ratio between the number of trees in the forest voting for a given class divided by
-the total number of tree - is computed as a 
-conformity scores or probabilities for each data point. 
- %for example we consider the following non conformity measure for our computations. 
-%\begin{definition} [Nonconformity Measure]
-%A nonconformity measure is a measurable function $\mathcal{A} : \mathcal{Z} \times \mathcal{Z}  \rightarrow \mathbb{R}$ such that $\mathcal{A}(Z_1 , Z_2 )$ does not depend on the ordering of observations in the set $Z_1$. 
-%\end{definition}
+The nonconformity measure is the score from a function that measures the strangeness of an example. In this study we use the noncomformity measure from a random forest classifier (RFC) which outputs $\tilde{y}=F_{RF}(x)$ where $\tilde{y} \in [0,1]$. Furthermore the noncomformity scores are for $0$-label $\alpha_{i} = 1-\tilde{y_{i}}$ and the $1$-label $\alpha_{i} = \tilde{y_{i}}$. However, the methodology is general and other underlying machine learning methods and nonconformity scores are equally applicable.To compute the corresponding p-values, we use the smoothed mondrian approach~\citep{vovk2005algorithmic}, where the taxonomy is defined by the labels.
 
-\begin{align} \label{eq:def_nonconformity}
-\begin{split}
-\alpha_i(z_i, 0) &= \frac{\#\text{trees voting for class 0}}{\#\text{of trees}}\\
-\alpha_i(z_i, 1) &= \frac{\#\text{trees voting for class 1}}{\#\text{of trees}}
-\end{split}
-\end{align}
 
-We denote by $\alpha_i(y)$ nonconformity score for $i^{th}$ observation for class $y$. Each component  $\alpha_i(y)$ that corresponds to the sample $(x_i,y_i)$ is computed by
-euqation (\ref{eq:def_nonconformity}) based on the augmented sample  $\{ z_1 , ..., z_n, z_{n+1}=(x_{new},y) \}$. The p-value as given below describes the lack of conformity of the  new observation $x_{new}$ to the training set $Z$
- \begin{align*}
- p_0 &= \frac{| \{ z_i \in Z : y_i=0, \alpha_i(0) < \alpha_{new}(0) \} | + u* | \{ z_i \in Z : y_i=0, \alpha_i(0) = \alpha_{new}(0)\} |}{n_0+1} \\
- p_1 &= \frac{| \{ z_i \in Z :  y_i=1, \alpha_i(1) < \alpha_{new}(1) \}  |+u*|  \{ z_i \in Z :  y_i=1, \alpha_i(1) =\alpha_{new}(1) \} |}{n_1+1} ,
- \end{align*}
- where $u \sim U[0,1]$, $n_0$ denotes the number of observations having the true label as 0, and $n_1$ denotes the number of observations having the true label as 1.
-The p-value $p(y)=p_y, y \in Y$ lies in $ \left( \frac{1}{n_y+1},1 \right)$. The smaller the $p(y)$
- is, the less likely the true pair is $(x_{new},y)$.
+%Consider an example of a non-conformity measure for binary classification
+%using the random forest method \citep{Breiman}.
+%, where voting for each class - 
+%the ratio between the number of trees in the forest voting for a given class divided by
+%the total number of tree - is computed as a 
+%conformity scores or probabilities for each data point. 
+% %for example we consider the following non conformity measure for our computations. 
+%%\begin{definition} [Nonconformity Measure]
+%%A nonconformity measure is a measurable function $\mathcal{A} : \mathcal{Z} \times \mathcal{Z}  \rightarrow \mathbb{R}$ such that $\mathcal{A}(Z_1 , Z_2 )$ does not depend on the ordering of examples in the set $Z_1$. 
+%%\end{definition}
+%
+%\begin{align} \label{eq:def_nonconformity}
+%\begin{split}
+%\alpha_i(z_i, 0) &= \frac{\#\text{trees voting for class 0}}{\#\text{of trees}}\\
+%\alpha_i(z_i, 1) &= \frac{\#\text{trees voting for class 1}}{\#\text{of trees}}
+%\end{split}
+%\end{align}
+%
+%We denote by $\alpha_i(y)$ nonconformity score for $i^{th}$ example for class $y$. Each component  $\alpha_i(y)$ that corresponds to the sample $(x_i,y_i)$ is computed by equation (\ref{eq:def_nonconformity}) based on the augmented sample  $\{ z_1 , ..., z_n, z_{n+1}=(x_{new},y) \}$. 
+
+
+%The p-value as given below describes the lack of conformity of the  new example $x_{new}$ to the training set $Z$
+% \begin{align*}
+% p_0 &= \frac{| \{ z_i \in Z : y_i=0, \alpha_i(0) < \alpha_{new}(0) \} | + u* | \{ z_i \in Z : y_i=0, \alpha_i(0) = \alpha_{new}(0)\} |}{n_0+1} \\
+% p_1 &= \frac{| \{ z_i \in Z :  y_i=1, \alpha_i(1) < \alpha_{new}(1) \}  |+u*|  \{ z_i \in Z :  y_i=1, \alpha_i(1) =\alpha_{new}(1) \} |}{n_1+1} ,
+% \end{align*}
+% where $u \sim U[0,1]$, $n_0$ denotes the number of examples having the true label as 0, and $n_1$ denotes the number of examples having the true label as 1.
+%The p-value $p(y)=p_y, y \in Y$ lies in $ \left( \frac{1}{n_y+1},1 \right)$. The smaller the $p(y)$
+% is, the less likely the true pair is $(x_{new},y)$.
 
  
 Conformal prediction provides a layer on top of an existing machine learning method and uses available data to determine valid prediction regions for new objects~\citep{vovk2005algorithmic}. 
-%The  conformal  predictors  exist  on  top  of  standard  machine  learning methods that results in prediction sets for all confidence levels. 
-%The nonconformity measure is a function that measures the strangeness of an observation,which is used to improve the performance of the prediction algorithms. 
-The predicted region of an observation is a subset of $\mathcal{Y}$ , denoted as $\Gamma^{\epsilon} = \{ y \mid p_y > \epsilon \}$, at a significance level $\alpha$. In the transductive approach (Algorithm \ref{algo:TCP}), the underlying model must be retrained each time a new test object is obtained. For further details on TCP, we refer to \cite{vapnik1998statistical}, \cite{shafer2008tutorial}, \cite{vovk2005algorithmic} and \cite{balasubramanian2014conformal}. 
+The predicted region of an object is a subset of $\mathcal{Y}$ , denoted as $\Gamma^{\epsilon} = \{ y \mid p_y > \epsilon \}$, at a significance level $\epsilon$. In the transductive approach (Algorithm \ref{algo:TCP}), the underlying model must be retrained each time an object is to be predicted. For further details on TCP, we refer to \cite{vapnik1998statistical}, \cite{shafer2008tutorial}, \cite{vovk2005algorithmic} and \cite{balasubramanian2014conformal}. 
 
 
 \vspace{0.3cm}
 \begin{algorithm}[H]
- \caption{\textbf{TCP}} \label{algo:TCP}
- \textbf{Input:}{ (training dataset:$Z$, test data:$x_{new}$, label set:$Y$, a nonconformity measure:$\mathcal{A})$}\\
+ \caption{\textbf{Mondrian TCP with random forest}} \label{algo:TCP}
+ \textbf{Input:}{ (training dataset:$Z$, object to predict:$x_{new}$, label set:$Y$, a nonconformity measure:$F_{RF}$}\\
  \textbf{Output:}{\textbf{ p-values} }\\
  %\textbf{Initialization\;}
  \For{each $y \in \mathcal{Y}$ }{
  	$z_{n+1} = (x_{new},y) $;\\
  	$Z^* = (Z,z_{n+1})$ ;\\
- 	Compute the transductive nonconformity scores:\\
- 	 $\alpha_i = \mathcal{A}(Z^*, z_i)$ for each $z_i \in Z^*$;\\
- 	 \textbf{\\}
-	Compute p-value: $ p(y) = \frac{| \{ i \in \{1,..,n+1\} : y_i=y, \alpha_i(y) < \alpha_{new}(y) \} | + u*| \{ i \in \{1,..,n+1\} : y_i=y, \alpha_i(y) < \alpha_{new}(y) \} |}{n_y}$;\\
+	Create $F_{RF}$ using $Z^*$\\
+	\If{$y_{i}=y$}{
+		 \For{each $i \in n+1$ }{
+			\textbf{if} $y_{i}=1$ \textbf{then}  $\alpha_i = F_{RF}(x_{i})$\\
+			\textbf{if} $y_{i}=0$ :  $\alpha_i = 1- F_{RF}(x_{i})$\\
+		 }
+		 }
+	Compute $p_{y}$ 
+%	Compute p-value: $ p(y) = \frac{| \{ i \in \{1,..,n+1\} : y_i=y, \alpha_i(y) < \alpha_{new}(y) \} | + u*| \{ i \in \{1,..,n+1\} : y_i=y, \alpha_i(y) < \alpha_{new}(y) \} |}{n_y}$;\\
   }
 
- $\textbf{p-values} = \{ p(y)| y \in \mathcal{Y}\}$;\\
- \textbf{return \textbf{p-values}};\\
+% $\textbf{p-values} = \{ p(y)| y \in \mathcal{Y}\}$;\\
+ \textbf{return $p_{new}^0,p_{new}^1$};\\
  \end{algorithm}
  \vspace{10pt}
 \textbf{ \\}
 
 %The significance is assumed at $\alpha = 0.05$, so we drop the superscript from $\Gamma$ from now on wards. The predictor make an error when it predicts an empty prediction region for a test case $|\Gamma| = 0$.
  
-We consider the following three criteria that measure the quality of a TCP: error rate,
-validity and efficiency. A predictor makes an error when the predicted region does not contain the true label $ y \not\in \Gamma^{\epsilon}$. Given a training dataset $Z$ and an external test set $T$,  and $|T| = m$. Suppose that the TCP gives prediction regions as $\Gamma_1^{\epsilon}, ...., \Gamma_m^{\epsilon}$, then the error rate is defined as 
+To assess the quality of a conformal predictor we consider validity and efficiency. A predictor makes an error when the predicted region does not contain the true label $ y \not\in \Gamma^{\epsilon}$. Given a training dataset $Z$ and an external test set $T$,  and $|T| = m$. Suppose that the conformal predictor gives prediction regions as $\Gamma_1^{\epsilon}, ...., \Gamma_m^{\epsilon}$, then the error rate is defined as 
 
 \begin{definition}[Error rate]
 \begin{align} \label{eq:errorRate}
@@ -76,8 +87,8 @@ validity and efficiency. A predictor makes an error when the predicted region do
 \end{align}	
 where $y_i$ is the true class label of the $i^{th}$ test case and $\textbf{I}$ is an indicator function. 	
 \end{definition}
-%&\frac{\# of errors}{m}
-In the following, we consider a way of assessing validity of a TCP in terms of deviation of observed from expected error. The deviation from exact validity can be computed as the Euclidean norm of the difference of the observed error and the expected error for a given set of predefined significance levels~\citep{carlsson2017comparing}. Let us assume a set of significance levels $\epsilon = \{ \epsilon_1, ..., \epsilon_k \}$, then the formula for the validity can be given as follows.
+
+In the following, we consider a way of assessing validity of a conformal predictor in terms of deviation of observed from expected error. The deviation from exact validity can be computed as the Euclidean norm of the difference of the observed error and the expected error for a given set of predefined significance levels~\citep{carlsson2017comparing}. Let us assume a set of significance levels $\epsilon = \{ \epsilon_1, ..., \epsilon_k \}$, then the formula for the validity can be given as follows.
 
 \begin{definition}[Validity]
 \begin{align} \label{eq:validity}

@@ -4,63 +4,14 @@
 \begin{document}
 
 
-\section{Datasets from UCI Repository}\label{sec:datasets}
-We used five different binary classification datasets from UCI repository in our experiments, details of which are given in Table \ref{tab:datasets}. %All the datasets are binary class problems with class labels (0, 1). 
 
-%The Spambase dataset contains 4601 observations and 57 features with class label (spam or non-Spam).  The Wisconsin Breast Cancer (Original) Dataset contains 699 observation, 10 features and class labels benign and malignant. The Mushroom dataset  contains 812 observations, 12 features that describes its physical characteristics, and class labels poisonous or edible. The First-order theorem proving dataset contains  6118  observations, 51 features: Given a theorem, predict which of five heuristics will give the fastest proof when used by a first-order prover.
- 
-	
-%
-%This dataset collected mainly from: PhishTank archive, MillerSmiles archive, Googleâ€™s searching operators.
-% mushrooms described in terms of physical characteristics; classification: poisonous or edible
+\section{Results and discussion}\label{sec:results}
 
 
-\begin{table} [h!] 
-\caption{Description of the datasets from UCI repository that are used in the experiments.} \centering
-\vspace{1em}
-\begin{tabular}{llllc}
-\toprule
-Dataset && Observations & \# Features \\
-\midrule
-Spambase (SB) & & 4601 & 57 \\
-\hline
-Breast Cancer Wisconsin (BC)  & & 699 & 10 \\
-\hline
-Mushroom (Mush)& & 8124 & 22 \\
-\hline
- First-order theorem proving (FOTP) & & 6118 & 51 \\
-\hline
-Phishing Websites (Phish) & & 2456 & 30 \\
-
-\bottomrule
-\end{tabular}\label{tab:datasets}
-\end{table}
-
-
-
-\section{Results}\label{sec:results}
-In this section we compare the performances of NDACP in seven different scenarios varying the number of data sources and size of each data source and applied to the five datasets, according to the following configurations: %Then we apply these different methods to all ten folds of each five datasets. In order to compare the various methods, we study validity (\ref{eq:validity}) and efficiency (\ref{eq:efficiency}). %All reported results are based on application of different methods to all ten folds of each five real datasets. 
-%
-%For each dataset we consider the following configurations:
-\begin{enumerate}
-
-\item We randomly split the dataset into ten folds, and further we split each fold into a training set (80\%) and an independent test set (20\%). % \todo{Either 5 folds or 90/10?}
-
-\item The training set of each fold is then split randomly into different number of sources according to the model under consideration as follows:
-\begin{enumerate}
-	\item Pooled source (pooled): Entire training set is considered as one single data source.
-	\item Equally sized sources (EqSrc): Training set is randomly partitioned into equally sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We consider 2, 4 and 6 equal sized sources. %in three different settings.
-	\item Unequally sized sources (RandSrc): Training set is randomly partitioned into unequally sized sources and  each partition is considered as a proper training set to model and compute p-values, and then p-values are aggregated for all sources. We consider 2, 4 and 6 unequally sized sources, and we repeat it five times to get five different set of sizes for each source.
-
-\end{enumerate}
-
-\end{enumerate}
-
-Repeat step 1 and step 2 for all datasets and combine the results for each method, then pairwise compare the validity and efficiency for all methods. %Single source, 2EqualSizedSource, 4EqualSizedSource, 6EqualSizedSource, 2UnequalSizedSource, 4UnequalSizedSource and 6UnequalSizedSource. The details of the datasets used and the results on individual datasets are given in Supplementary Material.%are given in the following, these data have been taken from the UCI Repository of machine learning batabases: ftp://ftp.ics.uci.edu/pub/machine-learning-databases/.
+%Single source, 2EqualSizedSource, 4EqualSizedSource, 6EqualSizedSource, 2UnequalSizedSource, 4UnequalSizedSource and 6UnequalSizedSource. The details of the datasets used and the results on individual datasets are given in Supplementary Material.%are given in the following, these data have been taken from the UCI Repository of machine learning batabases: ftp://ftp.ics.uci.edu/pub/machine-learning-databases/.
 %
 %
 %\subsection{Empirical results on Combined data}
-The results for comparing the different methods on combined results, by applying the Wilcoxon signed-rank test on validity and efficiency, are shown in Figure \ref{fig:testCombined}. To quantify the difference between the methods, box plots are given in Figure \ref{fig:boxplotCombined}.
 
 \begin{figure}[H]
 \centering
@@ -75,7 +26,7 @@ The results for comparing the different methods on combined results, by applying
   \includegraphics[width=.75\linewidth]{images/heatmapCombined_eff}
   %\caption{Efficiency}  \label{fig:effCombined}
 \end{subfigure}%
-\caption{Results of Wilcoxon signed-rank tests for two alternative hypotheses relating validity (a) and observed fuzziness (b) with combining all the datasets. The p-values are shown for the methods in the right column having greater values than the methods in the first row. All significant p-values are marked in red. Pooled: Unpartitioned dataset. EqSrc: equally partitioned data sources, RandSrc: randomly partitioned data sources. smallTCP: a single TCP model.} \label{fig:testCombined}
+\caption{Results of Wilcoxon signed-rank tests for two alternative hypotheses relating validity (a) and observed fuzziness (b) with combining all the datasets. The p-values are shown for the scenarios in the right column having greater values than the scenarios in the rows. All significant p-values are marked in red. Pooled: Unpartitioned dataset. EqSrc: equally partitioned data sources, RandSrc: randomly partitioned data sources. smallTCP: a single TCP model.} \label{fig:testCombined}
 \end{figure}
 
 %Another figure
@@ -103,16 +54,17 @@ The results for comparing the different methods on combined results, by applying
 
 
 
-\section{Discussions}
-The aim of this study was to improve predictions over different data sources without explicitly sharing the data, by aggregating conformal predictions computed at individual locations. In order to do so, we investigated if and how the number of data sources and size of these affect the aggregated efficiency and validity.
+%\section{Results and Discussions}
+%The aim of this study was to improve predictions over different data sources without explicitly sharing the data, by aggregating conformal predictions computed at individual locations. In order to do so, we investigated if and how the number of data sources and size of these affect the aggregated efficiency and validity.
+The results from the pairwise comparison of validity and efficiency (observed fuzziness) are shown in Figure \ref{fig:testCombined}. To illustrate the quantitative difference between the scenarios, box plots are presented in Figure~\ref{fig:boxplotCombined}.
+%
+Results in Figure~\ref{fig:testCombined} show that pooled is significantly more efficient than all other models, as would be expected, but in absolute numbers the decrease in efficiency is not so large when using NDCP. When comparing NDCP with individual smallTCP, we do not see a significant improvement in efficiency using NDCP but we observe a reduced variance, consistent with previous work~\citep{Carlsson:2014qr}, when there are 4 or more partitions. We also observe in Figure~\ref{fig:testCombined} that there is no significant difference between 'aggregated equally partitioned' and 'aggregated randomly partitioned', which would make the method generally applicable regardless of the sizes of individual training sets.
 
-Results in Figure~\ref{fig:testCombined} show that pooled is significantly more efficient than all other models, as would be expected, but in absolute numbers the decrease in efficiency is not so large when using an aggregated approach. When comparing NDACP with individual smallTCP, we do not see a significant improvement in efficiency using NDACP but we observe a reduced variance, consistent with previous work~\cite{Carlsson:2014qr}, when there are 4 or more partitions. We also observe in Figure~\ref{fig:testCombined} that there is no significant difference between 'aggregated equally partitioned' and 'aggregated randomly partitioned', which would make the method generally applicable regardless of the sizes of individual training sets.
-
-%NDACP more efficient predictions than individual analyses
+%NDCP more efficient predictions than individual analyses
 %1. To investigate if and how the number of data sources and size of the sources affect the aggregated efficiency and validity
 
 %\subsection{Validity}
-Regarding validity, we observe that the pooled model is always valid, as an example see Figure~\ref{fig:pooledCalibrationPlot} for the Spambase dataset. Further, we see that individual small models are also valid, see Figure~\ref{fig:valIndividual} for randomly partitioned small TCPs for Spambase dataset. Consistent with previous work by Linusson et al~\cite{Linusson:2017dn} and Carlsson et al.~\cite{Carlsson:2014qr}, NDACP is less valid overall, see Figure~\ref{fig:valCombined} for randomly partitioned NDACPs for Spambase dataset, but calibration plot shows conservative validity for the significance levels 0 to 0.5 which is the interesting region for predictions. This is a known issue that requires further research; we settle here with the observation that validity does not seem to be a practical problem for NDACP in the interesting significance region.
+Regarding validity, we observe that the pooled model is always valid, as an example see Figure~\ref{fig:pooledCalibrationPlot} for the Spambase dataset. Further, we see that individual small models are also valid, see Figure~\ref{fig:valIndividual} for randomly partitioned small TCPs for Spambase dataset. Consistent with previous work by Linusson et al~\cite{Linusson:2017dn} and Carlsson et al.~\cite{Carlsson:2014qr}, NDCP is less valid overall, see Figure~\ref{fig:valCombined} for randomly partitioned NDCPs for Spambase dataset, but calibration plot shows conservative validity for the significance levels 0 to 0.5 which is the interesting region for predictions. This is a known issue that requires further research; we settle here with the observation that validity does not seem to be a practical problem for NDCP in the interesting significance region.
 
 \begin{figure}[H]
 \begin{center}
@@ -129,10 +81,10 @@ Regarding validity, we observe that the pooled model is always valid, as an exam
   \begin{subfigure}{.3\textwidth}
   \centering
   \includegraphics[scale=0.2]{images/eqSourceCombined}
-  \caption{NDACPs}\label{fig:valCombined}
+  \caption{NDCPs}\label{fig:valCombined}
   \end{subfigure}
   
- \caption{Calibration plot for various models. a) Calibration plot of TCP for one fold of Spambase dataset. b) Calibration plot of randomly partitioned small TCPs for one fold of  Spambase dataset. Blue, orange and  green line indicate each small TCP from two, four and six source random partitions respectively. c) Calibration plot of NDACPs for one fold of Spambase dataset. Blue, orange and  green line indicate NDACP from two, four and six source random partitions respectively}
+ \caption{Calibration plot for various models. a) Calibration plot of TCP for one fold of Spambase dataset. b) Calibration plot of randomly partitioned small TCPs for one fold of  Spambase dataset. Blue, orange and  green line indicate each small TCP from two, four and six source random partitions respectively. c) Calibration plot of NDCPs for one fold of Spambase dataset. Blue, orange and  green line indicate NDCP from two, four and six source random partitions respectively}
  
 \end{center}
 \end{figure}
