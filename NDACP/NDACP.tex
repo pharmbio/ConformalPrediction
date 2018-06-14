@@ -22,15 +22,14 @@
 \usepackage{float}
 
 \usepackage{tikz}
-\usetikzlibrary{arrows,shapes,positioning,shadows,trees}
-\newcommand{\indep}{\rotatebox[origin=c]{90}{$\models$}}
+ \usetikzlibrary{arrows,shapes,positioning,shadows,trees}
 \tikzset{
   basic/.style  = {draw, text width=2cm, drop shadow, font=\sffamily, rectangle},
-  root/.style   = {basic, rounded corners=2pt, thin, align=center,
-                   fill=green!30},
-  level 2/.style = {basic, rounded corners=6pt, thin,align=center, fill=green!60,
-                   text width=8em},
-  level 3/.style = {basic, thin, align=left, fill=pink!60, text width=6.5em}
+  root/.style   = {basic, thin, align=center, 
+                   fill=white!30, text width=5em},
+  level 2/.style = {basic,  thin,align=center, fill=white!60,
+                   text width=5em},
+  level 3/.style = {basic, thin, align=left, fill=white!60, text width=5em}
 }
 
 
@@ -244,7 +243,12 @@ $\bar{p}_{new}^1 = \bar{p}^1 / K$\\
  
 
 
-\begin{table} [b]
+
+\section{Evaluation}
+
+We evaluate NDCP on five binary classification datasets from the UCI repository (Table \ref{tab:datasets}) that are randomly partitioned into a training set ($80\%$) and a test set ($20\%$). 
+
+\begin{table} [H]
 \caption{Description of the datasets from UCI repository that are used in the evaluation.} \centering
 \vspace{1em}
 \begin{tabular}{llllc}
@@ -260,16 +264,11 @@ Mushroom (Mush)& & 8124 & 22 \\
  First-order theorem proving (FOTP) & & 6118 & 51 \\
 \hline
 Phishing Websites (Phish) & & 2456 & 30 \\
-
 \bottomrule
 \end{tabular}\label{tab:datasets}
 \end{table}
 
-
-
-\section{Evaluation}
-
-We evaluate NDCP on five binary classification datasets from the UCI repository (Table \ref{tab:datasets}) that are randomly partitioned into a training set ($80\%$) and a test set ($20\%$). The steps are described below, and also illustrated in Figure \ref{fig:uACP}.
+The steps are described below, and also illustrated in Figure \ref{fig:uACP}.
 
 %Add comments on random forest, what package and version we used
 
@@ -285,7 +284,7 @@ We evaluate NDCP on five binary classification datasets from the UCI repository 
 \end{enumerate}
 
 
-\item Predict p-values for the different scenarios using Algorithm~\ref{algo:NDCP}
+\item Predict p-values for the different scenarios using Algorithm \ref{algo:NDCP}
 
 \item Perform evaluation based on validity and efficiency
 
@@ -294,7 +293,6 @@ We evaluate NDCP on five binary classification datasets from the UCI repository 
 %\item Pairwise compare the $q$ uACP results obtained to see whether the number of sources or different size of the sources make any difference in validity or efficiency. %(this part is not clear yet).
 
 \end{enumerate}
-
 
 %We evaluated NDCP in different scenarios, varying the number of data sources and size of each data source, and performed the evaluation on all five datasets: %, according to the following configurations: %Then we apply these different methods to all ten folds of each five datasets. In order to compare the various methods, we study validity (\ref{eq:validity}) and efficiency (\ref{eq:efficiency}). %All reported results are based on application of different methods to all ten folds of each five real datasets. 
 %
@@ -316,29 +314,12 @@ We evaluate NDCP on five binary classification datasets from the UCI repository 
 Results were combined for each scenario over all datasets, and then a pairwise comparison using a Wilcoxon signed-rank test on validity and efficiency for all scenarios were performed.
 
 
-
-
-
 %The results obtained for $q$ NDCP are then compared pairwise and also compared with the pooled (total) data and equal (balanced) sized partitions. Below we describe the study procedure (random sized or equal sized partition) and the parameters (the number and size of the sources) to be investigated in the result section. 
 
 
 %In the following section, we show results when the procedure is applied to five different datasets. 
-
- \usetikzlibrary{arrows,shapes,positioning,shadows,trees}
-
-\tikzset{
-  basic/.style  = {draw, text width=2cm, drop shadow, font=\sffamily, rectangle},
-  root/.style   = {basic, thin, align=center, 
-                   fill=white!30, text width=5em},
-  level 2/.style = {basic,  thin,align=center, fill=white!60,
-                   text width=5em},
-  level 3/.style = {basic, thin, align=left, fill=white!60, text width=5em}
-}
-
-
 \begin{center}
 \begin{figure}
-
 \begin{tikzpicture}[
   level 1/.style={sibling distance=40mm},
   edge from parent/.style={->,draw},
@@ -395,16 +376,22 @@ Results were combined for each scenario over all datasets, and then a pairwise c
   \draw[->] (c2)->(p11);
   \draw[->] (c2)->(p12);
   \draw[->] (c2)->(p13);
-  
 \end{tikzpicture}
 \caption{Evaluation of NDCP Algorithm for a given dataset} \label{fig:uACP}
 \end{figure}
-
 \end{center}
 
-
+\newpage
 \section{Results and discussion}\label{sec:results}
+The results from the pairwise comparison of validity and efficiency (observed fuzziness) are shown in Figure \ref{fig:testCombined}. To illustrate the quantitative difference between the scenarios, box plots are presented in Figure~\ref{fig:boxplotCombined}.
+%
+Results in Figure~\ref{fig:testCombined} show that pooled is significantly more efficient than all other models, as would be expected, but in absolute numbers the decrease in efficiency is not so large when using NDCP. When comparing NDCP with individual smallTCP, we do not see a significant improvement in efficiency using NDCP but we observe a reduced variance, consistent with previous work~\citep{Carlsson:2014qr}, when there are 4 or more partitions. We also observe in Figure~\ref{fig:testCombined} that there is no significant difference between 'aggregated equally partitioned' and 'aggregated randomly partitioned', which would make the method generally applicable regardless of the sizes of individual training sets.
 
+%NDCP more efficient predictions than individual analyses
+%1. To investigate if and how the number of data sources and size of the sources affect the aggregated efficiency and validity
+
+%\subsection{Validity}
+Regarding validity, we observe that the pooled model is always valid, as an example see Figure~\ref{fig:pooledCalibrationPlot} for the Spambase dataset. Further, we see that individual small models are also valid, see Figure~\ref{fig:valIndividual} for randomly partitioned small TCPs for Spambase dataset. Consistent with previous work by Linusson et al~\cite{Linusson:2017dn} and Carlsson et al.~\cite{Carlsson:2014qr}, NDCP is less valid overall, see Figure~\ref{fig:valCombined} for randomly partitioned NDCPs for Spambase dataset, but calibration plot shows conservative validity for the significance levels 0 to 0.5 which is the interesting region for predictions. This is a known issue that requires further research; we settle here with the observation that validity does not seem to be a practical problem for NDCP in the interesting significance region.
 
 %Single source, 2EqualSizedSource, 4EqualSizedSource, 6EqualSizedSource, 2UnequalSizedSource, 4UnequalSizedSource and 6UnequalSizedSource. The details of the datasets used and the results on individual datasets are given in Supplementary Material.%are given in the following, these data have been taken from the UCI Repository of machine learning batabases: ftp://ftp.ics.uci.edu/pub/machine-learning-databases/.
 %
@@ -454,15 +441,7 @@ Results were combined for each scenario over all datasets, and then a pairwise c
 
 %\section{Results and Discussions}
 %The aim of this study was to improve predictions over different data sources without explicitly sharing the data, by aggregating conformal predictions computed at individual locations. In order to do so, we investigated if and how the number of data sources and size of these affect the aggregated efficiency and validity.
-The results from the pairwise comparison of validity and efficiency (observed fuzziness) are shown in Figure \ref{fig:testCombined}. To illustrate the quantitative difference between the scenarios, box plots are presented in Figure~\ref{fig:boxplotCombined}.
-%
-Results in Figure~\ref{fig:testCombined} show that pooled is significantly more efficient than all other models, as would be expected, but in absolute numbers the decrease in efficiency is not so large when using NDCP. When comparing NDCP with individual smallTCP, we do not see a significant improvement in efficiency using NDCP but we observe a reduced variance, consistent with previous work~\citep{Carlsson:2014qr}, when there are 4 or more partitions. We also observe in Figure~\ref{fig:testCombined} that there is no significant difference between 'aggregated equally partitioned' and 'aggregated randomly partitioned', which would make the method generally applicable regardless of the sizes of individual training sets.
 
-%NDCP more efficient predictions than individual analyses
-%1. To investigate if and how the number of data sources and size of the sources affect the aggregated efficiency and validity
-
-%\subsection{Validity}
-Regarding validity, we observe that the pooled model is always valid, as an example see Figure~\ref{fig:pooledCalibrationPlot} for the Spambase dataset. Further, we see that individual small models are also valid, see Figure~\ref{fig:valIndividual} for randomly partitioned small TCPs for Spambase dataset. Consistent with previous work by Linusson et al~\cite{Linusson:2017dn} and Carlsson et al.~\cite{Carlsson:2014qr}, NDCP is less valid overall, see Figure~\ref{fig:valCombined} for randomly partitioned NDCPs for Spambase dataset, but calibration plot shows conservative validity for the significance levels 0 to 0.5 which is the interesting region for predictions. This is a known issue that requires further research; we settle here with the observation that validity does not seem to be a practical problem for NDCP in the interesting significance region.
 
 \begin{figure}[H]
 \begin{center}
@@ -501,7 +480,6 @@ Regarding validity, we observe that the pooled model is always valid, as an exam
 \section{Conclusions}
 We present a method to aggregate conformal predictions from multiple sources while preserving data privacy. The method is a generalization of the basic conformal prediction framework to handle multiple data sources without disclosing data between the data sources. Due to its low complexity for implementation, we believe the method will be useful for organizations that wish to make predictions over combined data without disclosing data to each other, such as for drug discovery problems when pharmaceutical companies wishes to establish predictive models of drug safety.
 
-\newpage
 
 \bibliographystyle{elsarticle-harv} 
 \bibliography{NDACP}
